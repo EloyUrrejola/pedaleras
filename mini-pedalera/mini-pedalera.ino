@@ -5,15 +5,15 @@
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
 
-#include "Button.h"
-#include "MyClock.h"
-#include "Led.h"
-#include "MidiMessage.h"
-#include "Screen.h"
-#include "Settings.h"
-#include "SongSelector.h"
-#include "SysExMessage.h"
-#include "Tuner.h"
+#include "src/Button.h"
+#include "src/MyClock.h"
+#include "src/Led.h"
+#include "src/MidiMessage.h"
+#include "src/Screen.h"
+#include "src/Settings.h"
+#include "src/SongSelector.h"
+#include "src/SysExMessage.h"
+#include "src/Tuner.h"
 
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT 128
