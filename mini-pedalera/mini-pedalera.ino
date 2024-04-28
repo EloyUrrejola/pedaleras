@@ -24,20 +24,20 @@ const uint8_t  OLED_pin_cs_ss          = 10;
 const uint8_t  OLED_pin_res_rst        = 8;
 const uint8_t  OLED_pin_dc_rs          = 9;
 
-const uint8_t button_pins[]            = {27,30,31,32,16,17, 3, 2,  38,34,35,39,40,23,22,21,20,19};
-const uint8_t button_ccs[]             = {14,15,20,21,22,23,24,25,  26,27,28,29,30,31,85,86,87, 0};
+const uint8_t button_pins[]            = {38,34,35,39,40,23,22,20,19};
+const uint8_t button_ccs[]             = {26,27,28,29,30,31,85,87, 0};
 // CCs al soltar el botón
-const uint8_t button_release_ccs[]     = { 0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0, 0,88};
+const uint8_t button_release_ccs[]     = { 0, 0, 0, 0, 0, 0, 0, 0,88};
 // CCs recibidos para activar momentary_ccs, por ej. guitar MOD (89)
-const uint8_t button_momentary_set[]   = { 0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0,89, 0, 0, 0, 0, 0, 0};
+const uint8_t button_momentary_set[]   = { 0, 0, 0,89, 0, 0, 0, 0, 0};
 // Acción activada con button_momentary_set, por ej. guitar/bass (20)
-const uint8_t button_momentary_ccs[]   = { 0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0,20, 0, 0, 0, 0, 0, 0};
+const uint8_t button_momentary_ccs[]   = { 0, 0, 0,20, 0, 0, 0, 0, 0};
 // Tunner: tuner_mode (3)
-const uint8_t button_push_actions[]    = { 0, 0, 0, 0, 3, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const uint8_t button_push_actions[]    = { 0, 0, 0, 0, 0, 0, 0, 0, 0};
 // Acciones pasado un intervalo de tiempo (300 ms)
-const uint8_t button_hold_actions[]    = { 0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 5, 4, 0, 0, 1, 2};
+const uint8_t button_hold_actions[]    = { 0, 0, 0, 0, 5, 4, 0, 1, 2};
 // Botones usados para los settings
-const uint8_t settings_buttons[]       = { 0, 0, 0, 0, 7, 0, 0, 0,   0, 0, 5, 6, 3, 8, 0, 4, 1, 2};
+const uint8_t settings_buttons[]       = { 0, 0, 5, 6, 3, 8, 0, 1, 2};
 const uint8_t SETTINGS_ACTION = 1;
 const uint8_t SONG_SELECTOR_ACTION = 2;
 const uint8_t TUNER_ACTION = 3;
@@ -45,8 +45,8 @@ const uint8_t CLOCK_ACTION = 4;
 const uint8_t NEXT_SONG_ACTION = 5;
 const uint8_t NUMBER_OF_BUTTONS = sizeof(button_pins) / sizeof(button_pins[0]);
 
-const uint8_t led_pins[]    = { 7, 4, 5, 6,24,25,28,29,  33,37,36,14,18,15};
-const uint8_t led_ccs[]     = {14,15,20,21,22,23,24,25,  26,27,28,29,85,86};
+const uint8_t led_pins[]    = {33,37,36,14, 0, 0,18,15, 0, 0};
+const uint8_t led_ccs[]     = {26,27,28,29, 0, 0,85,86, 0, 0};
 const uint8_t NUMBER_OF_LEDS = sizeof(led_pins) / sizeof(led_pins[0]);
 
 Button *buttons[NUMBER_OF_BUTTONS];
