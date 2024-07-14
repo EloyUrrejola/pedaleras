@@ -19,7 +19,7 @@ void SongSelector::startSongSelectorMode()
   song_list = SongList::getSongList();
   screen->clean();
   for (uint8_t i = 0; i < 4; i++) {
-    leds[leds_index[i]]->flash(LED_FLASHING_ON, LED_FLASHING_OFF, -1);
+//    leds[leds_index[i]]->flash(LED_FLASHING_ON, LED_FLASHING_OFF, -1);
   }
   showSongSelectorPanel(temp_song_index, INIT);
 }
@@ -29,7 +29,7 @@ void SongSelector::songSelectorMode()
   bool settings_mode = true;
   while (settings_mode) {
     for (uint8_t i = 0; i < 4; i++) {
-      leds[leds_index[i]]->flashUpdate();
+//      leds[leds_index[i]]->flashUpdate();
     }
     for (uint8_t i = 0; i < number_of_buttons; i++) {
       uint8_t action = buttons[i]->settingsChanged();
@@ -66,7 +66,6 @@ void SongSelector::exitSongSelectorMode()
 void SongSelector::showSongSelectorPanel(uint8_t song_index, int direction)
 {
   uint8_t first_song = 0;
-  uint8_t max_number_of_visible_songs = 6;
   uint8_t number_of_songs = SongList::getNumberOfSongs();
   bool slide = false;
 
@@ -74,8 +73,8 @@ void SongSelector::showSongSelectorPanel(uint8_t song_index, int direction)
     first_song = 0;
   } else {
     if (direction == UP) {
-      if (song_index > 3) {
-        first_song = song_index - 4;
+      if (song_index > (max_number_of_visible_songs - 3)) {
+        first_song = song_index - (max_number_of_visible_songs - 2);
         if (song_index < number_of_songs - 2) {
           slide = true;
         }
@@ -85,8 +84,8 @@ void SongSelector::showSongSelectorPanel(uint8_t song_index, int direction)
     }
     if (direction == DOWN) {
       uint8_t last_song = number_of_songs - 1;
-      if (song_index > last_song - 4) {
-        first_song = last_song - 5;
+      if (song_index > last_song - (max_number_of_visible_songs - 2)) {
+        first_song = last_song - (max_number_of_visible_songs - 1);
       } else {
         if (song_index > 1) {
           slide = true;
@@ -96,8 +95,8 @@ void SongSelector::showSongSelectorPanel(uint8_t song_index, int direction)
     }
     if (direction == INIT) {
       uint8_t last_song = number_of_songs - 1;
-      if (song_index > last_song - 4) {
-        first_song = last_song - 5;
+      if (song_index > last_song - (max_number_of_visible_songs - 2)) {
+        first_song = last_song - (max_number_of_visible_songs - 1);
       } else {
         if (song_index > 0) {
           first_song = song_index - 1;
@@ -113,10 +112,6 @@ void SongSelector::showSongSelectorPanel(uint8_t song_index, int direction)
     move = false;
   }
   last_first_song = first_song;
-  if (slide) {
-    if (direction == DOWN) {
-    }
-  }
 
   screen->writeSongList(first_song, song_index, direction, slide, move);
 }

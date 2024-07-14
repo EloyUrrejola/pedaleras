@@ -9,13 +9,14 @@
 class Button
 {
   public:
-    Button(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+    Button(uint8_t, uint8_t[2], uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
     void changeMomentary(bool state);
     uint8_t changed();
     uint8_t settingsChanged();
     void sendControlChange(uint8_t cc);
     uint8_t getButtonCc();
     uint8_t getSetMomentaryCc();
+    static void updateButtonsMode(uint8_t);
     
   private:
     const uint8_t channel = 1;
@@ -24,9 +25,12 @@ class Button
     const uint8_t debouncer_interval = 5;
     const uint16_t ACTION_TIME = 300;
     const uint16_t CONTINUOUS_DELAY = 0;
+    static const uint8_t BASS_MODE = 0;
+    static const uint8_t CHORD_MODE = 1;
 
+    static uint8_t buttons_mode;
     uint8_t button_pin;
-    uint8_t button_cc;
+    uint8_t button_ccs[2];
     uint8_t button_release_cc;
     bool button_momentary;
     uint8_t button_set_momentary_cc;

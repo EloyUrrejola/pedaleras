@@ -4,8 +4,9 @@ MidiMessage::MidiMessage()
 {
 }
 
-void MidiMessage::init(Button* buttons[], uint8_t number_of_buttons, Led* leds[], uint8_t number_of_leds)
+void MidiMessage::init(Screen *screen, Button* buttons[], uint8_t number_of_buttons, Led* leds[], uint8_t number_of_leds)
 {
+  this->screen = screen;
   this->buttons = buttons;
   this->number_of_buttons = number_of_buttons;
   this->leds = leds;
@@ -22,6 +23,9 @@ void MidiMessage::process(uint8_t channel, uint8_t control, uint8_t value)
   }
   if (isSettingMessage(channel)) {
     processSettingMessage(control, value);
+  }
+  if (isModeMessage(channel)) {
+    processModeMessage(control, value);
   }
 }
 
@@ -44,6 +48,14 @@ bool MidiMessage::isButtonModeMessage(uint8_t channel)
 bool MidiMessage::isSettingMessage(uint8_t channel)
 {
   if (channel == SETTING_CHANNEL) {
+    return true;
+  }
+  return false;
+}
+
+bool MidiMessage::isModeMessage(uint8_t channel)
+{
+  if (channel == MODE_CHANNEL) {
     return true;
   }
   return false;
@@ -93,4 +105,11 @@ int MidiMessage::getButtonIndexBySetMomentaryCc(uint8_t cc)
 void MidiMessage::processSettingMessage(uint8_t cc, uint8_t value)
 {
   Settings::setSettingValue(cc, value);
+}
+
+void MidiMessage::processModeMessage(uint8_t cc, uint8_t value)
+{
+  uint8_t mode = (value == 127) ? 1 : 0;
+  Button::updateButtonsMode(mode);
+  screen->writeButtonsMode(mode);
 }

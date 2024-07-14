@@ -76,6 +76,8 @@ bool Led::flashUpdateTimes()
 
 uint8_t Led::getLedIntensityLevel()
 {
+  Serial.println("LED");
+  Serial.println(Led::led_intensity_level);
   return Led::led_intensity_level + 1;
 }
 

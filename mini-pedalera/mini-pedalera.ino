@@ -1,56 +1,26 @@
 #ifndef MINI_PEDALERA_INO
 #define MINI_PEDALERA_INO
 
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1351.h>
+#include <ILI9488_t3.h>
 #include <SPI.h>
 
+#include "src/config.h"
 #include "src/Button.h"
-#include "src/MyClock.h"
 #include "src/Led.h"
 #include "src/MidiMessage.h"
+#include "src/MyClock.h"
 #include "src/Screen.h"
 #include "src/Settings.h"
 #include "src/SongSelector.h"
 #include "src/SysExMessage.h"
 #include "src/Tuner.h"
 
-#define SCREEN_WIDTH  128
-#define SCREEN_HEIGHT 128
-
-//const uint8_t   OLED_pin_scl_sck        = 13;
-//const uint8_t   OLED_pin_sda_mosi       = 11;
-const uint8_t  OLED_pin_cs_ss          = 10;
-const uint8_t  OLED_pin_res_rst        = 8;
-const uint8_t  OLED_pin_dc_rs          = 9;
-
-const uint8_t button_pins[]            = {38,34,35,39,40,23,22,20,19};
-const uint8_t button_ccs[]             = {26,27,28,29,30,31,85,87, 0};
-// CCs al soltar el botón
-const uint8_t button_release_ccs[]     = { 0, 0, 0, 0, 0, 0, 0, 0,88};
-// CCs recibidos para activar momentary_ccs, por ej. guitar MOD (89)
-const uint8_t button_momentary_set[]   = { 0, 0, 0,89, 0, 0, 0, 0, 0};
-// Acción activada con button_momentary_set, por ej. guitar/bass (20)
-const uint8_t button_momentary_ccs[]   = { 0, 0, 0,20, 0, 0, 0, 0, 0};
-// Tunner: tuner_mode (3)
-const uint8_t button_push_actions[]    = { 0, 0, 0, 0, 0, 0, 0, 0, 0};
-// Acciones pasado un intervalo de tiempo (300 ms)
-const uint8_t button_hold_actions[]    = { 0, 0, 0, 0, 5, 4, 0, 1, 2};
-// Botones usados para los settings
-const uint8_t settings_buttons[]       = { 0, 0, 5, 6, 3, 8, 0, 1, 2};
-const uint8_t SETTINGS_ACTION = 1;
-const uint8_t SONG_SELECTOR_ACTION = 2;
-const uint8_t TUNER_ACTION = 3;
-const uint8_t CLOCK_ACTION = 4;
-const uint8_t NEXT_SONG_ACTION = 5;
-const uint8_t NUMBER_OF_BUTTONS = sizeof(button_pins) / sizeof(button_pins[0]);
-
-const uint8_t led_pins[]    = {33,37,36,14, 0, 0,18,15, 0, 0};
-const uint8_t led_ccs[]     = {26,27,28,29, 0, 0,85,86, 0, 0};
-const uint8_t NUMBER_OF_LEDS = sizeof(led_pins) / sizeof(led_pins[0]);
+const uint8_t NUMBER_OF_BUTTONS = 9;
+const uint8_t NUMBER_OF_LEDS = 9;
 
 Button *buttons[NUMBER_OF_BUTTONS];
 Led *leds[NUMBER_OF_LEDS];
+
 MidiMessage midi_message;
 SysExMessage sysex_message;
 SongSelector song_selector;
@@ -58,30 +28,24 @@ Settings settings;
 Tuner tuner;
 MyClock my_clock;
 
-const int LED_FLASHING_ON  = 500;
-const int LED_FLASHING_OFF = 500;
-const int LED_FLASHING_TIMES = 3;
-
 uint8_t action;
 
-Adafruit_SSD1351 adafruit = Adafruit_SSD1351(
-  SCREEN_WIDTH,
-  SCREEN_HEIGHT,
-  &SPI,
-  OLED_pin_cs_ss,
-  OLED_pin_dc_rs,
-  OLED_pin_res_rst
-);
-Screen screen(&adafruit);
+#define TFT_RST 8
+#define TFT_DC  9
+#define TFT_CS  10
+ILI9488_t3 tft = ILI9488_t3(&SPI, TFT_CS, TFT_DC, TFT_RST);
+
+Screen screen(&tft);
 
 void setup()
 {
   Serial.begin(9600);
 
   for (uint8_t i = 0; i < NUMBER_OF_BUTTONS; i++) {
+    uint8_t button_ccs_array[2] = {BUTTON_PIN_CCS[0][i], BUTTON_PIN_CCS[1][i]};
     buttons[i] = new Button(
       button_pins[i],
-      button_ccs[i],
+      button_ccs_array,
       button_release_ccs[i],
       button_momentary_set[i],
       button_momentary_ccs[i],
@@ -94,7 +58,7 @@ void setup()
     leds[i] = new Led(led_pins[i], led_ccs[i]);
   }
 
-  midi_message.init(buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
+  midi_message.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
   sysex_message.init(&screen);
   song_selector.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
   settings.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
@@ -111,11 +75,11 @@ void setup()
 void start()
 {
   screen.clean();
-  screen.writeMessage("", "READY");
+  screen.writeMessage("READY", "");
   flash_leds(LED_FLASHING_TIMES);
   // Hay que dar tiempo a que se GP conecte con el puerto USB.
   // Habrá que hacer un ping antes.
-  delay(3000);
+  delay(1000);
   requestSetlist();
 }
 
@@ -139,6 +103,9 @@ void loop()
       }
       if (action == NEXT_SONG_ACTION) {
         nextSong();
+      }
+      if (action == STOP_ACTION) {
+        stopAudio();
       }
     }
   }
@@ -190,7 +157,12 @@ void requestSetlist()
 
 void nextSong()
 {
-  usbMIDI.sendControlChange(91, 127, 1);
+  usbMIDI.sendControlChange(NEXT_SONT_CC, 127, 1);
+}
+
+void stopAudio()
+{
+  usbMIDI.sendControlChange(STOP_BUTTON_CC, 127, 1);
 }
 
 int getDatetime(char* message)

@@ -24,7 +24,7 @@ class Settings
     uint8_t number_of_leds;
 
     const uint8_t _number_of_setting_buttons = 4;
-    const uint8_t _buttons_index[4] = {11,12,16,17};
+    const uint8_t _buttons_index[4] = {3,4,7,8};
 
     const int LED_FLASHING_ON  = 500;
     const int LED_FLASHING_OFF = 500;
@@ -38,6 +38,7 @@ class Settings
 
     char settings_title[9] = "SETTINGS";
     const uint8_t led_intensity_menu_option = 0;
+    const uint8_t screen_intensity_menu_option = 1;
     const uint8_t audio_stereo_sep_option = 0;
     const uint8_t audio_midi_left_option = 1;
     const uint8_t audio_midi_right_option = 2;

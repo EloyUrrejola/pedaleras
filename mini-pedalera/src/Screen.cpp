@@ -1,31 +1,44 @@
 #include "Screen.h"
 
-Screen::Screen(Adafruit_SSD1351 *adafruit)
+Screen::Screen(ILI9488_t3 *tft)
 {
-  screen = adafruit;
+  screen = tft;
 }
 
 void Screen::begin()
 {
   screen->begin();
+  screen->setRotation(3);
+  pinMode(TFT_VCC, OUTPUT);
+  setBacklightLevel(3);
+}
+
+void Screen::setBacklightLevel(uint8_t backlight_level)
+{
+  //analogWrite(TFT_VCC, backlight_level);
 }
 
 void Screen::clean()
 {
-  screen->fillScreen(OLED_Color_Black);
+  screen->fillScreen(ILI9488_BLACK);
 }
 
 void Screen::writeTempMessage(const std::string line1, const std::string line2)
 {
+  removeMessage();
   writeMessage(line1, line2);
   delay(TEMP_MESSAGE_DELAY);
+  removeMessage();
   writeSongAndPart();
+}
+
+void Screen::removeMessage()
+{
+  screen->fillRect(0, message_y, ILI9488_TFTHEIGHT, messages_height, SCREEN_BG_COLOR);
 }
 
 void Screen::writeMessage(const std::string line1, const std::string line2)
 {
-  screen->fillRect(0, 0, 128, 56, SCREEN_BG_COLOR);
-
   screen->setFont(message_font);
   screen->setTextSize(message_size);
   screen->setTextWrap(false);
@@ -52,8 +65,7 @@ void Screen::writeSongAndPart()
   const std::string song = SongList::getCurrentSong();
   const std::string part = SongList::getCurrentPart();
 
-  screen->fillRect(0, 0, 128, 56, SCREEN_BG_COLOR);
-
+  screen->fillRect(0, 0, 480, song_and_part_height, SCREEN_BG_COLOR);
   screen->setFont(song_name_font);
   screen->setTextSize(song_name_size);
   screen->setTextWrap(false);
@@ -76,8 +88,6 @@ void Screen::writeSongAndPart()
 
 void Screen::writeChord(std::string chord)
 {
-  screen->fillRect(0, 71, 128, 50, SCREEN_BG_COLOR);
-
   screen->setFont(chord_font);
   screen->setTextSize(chord_size);
 
@@ -90,7 +100,7 @@ void Screen::writeChord(std::string chord)
 
 void Screen::removeChord()
 {
-  screen->fillRect(0, 71, 128, 50, SCREEN_BG_COLOR);
+  screen->fillRect(0, chord_y - 2, 480, chord_h, SCREEN_BG_COLOR);
 }
 
 void Screen::writeSettingsTitle(char *title)
@@ -106,8 +116,6 @@ void Screen::writeSettingsTitle(char *title)
   screen->setCursor(centered_x, settings_y);
   screen->setTextColor(settings_color);
   screen->print(title);
-
-  screen->drawLine(centered_x, 26, centered_x + width, 26, settings_color);
 }
 
 void Screen::showSettingOptions(char **menu, uint8_t number_of_options, uint8_t selected_menu, uint8_t *option_values, bool *options_with_values)
@@ -125,7 +133,7 @@ void Screen::showSettingOptions(char **menu, uint8_t number_of_options, uint8_t 
     screen->print(menu[i]);
     
     if (options_with_values[i]) {
-      screen->fillRect(settings_value_x, line_height * (i + 1) + 6, 128 - settings_value_x, line_height, SCREEN_BG_COLOR);
+      screen->fillRect(screen->width() - settings_value_width, line_height * (i + 2) + 6, settings_value_width, line_height, SCREEN_BG_COLOR);
       char str_option_value[4];
       sprintf(str_option_value, "%u", option_values[i]);
       uint16_t width = getTextWidth(str_option_value);
@@ -145,7 +153,7 @@ void Screen::showSettingOptionEdition(char **menu, uint8_t number_of_options, ui
   screen->setCursor(0, line_height * (selected_menu + 2) + 6);
   screen->print(menu[selected_menu]);
 
-  screen->fillRect(settings_value_x, line_height * (selected_menu + 1) + 6, 128 - settings_value_x, line_height, SCREEN_BG_COLOR);
+  screen->fillRect(screen->width() - settings_value_width, line_height * (selected_menu + 2) + 6, settings_value_width, line_height, SCREEN_BG_COLOR);
 
   char str_option_value[4];
   sprintf(str_option_value, "%u", option_value);
@@ -159,6 +167,13 @@ int16_t Screen::getCenteredXFromText(const std::string text)
 {
   uint16_t width = getTextWidth(text);
   int16_t centered_x = (screen->width() / 2) - floor(width / 2);
+  return centered_x > 0 ? centered_x : 0;
+}
+
+int16_t Screen::getCenteredXFromTextInWidth(const std::string text, uint16_t width)
+{
+  uint16_t text_width = getTextWidth(text);
+  int16_t centered_x = (width / 2) - floor(text_width / 2);
   return centered_x > 0 ? centered_x : 0;
 }
 
@@ -243,7 +258,7 @@ void Screen::removeLastSongs()
   screen->setFont(settings_song_name_font);
   screen->setTextSize(settings_song_name_size);
   screen->setTextWrap(false);
-  screen->setTextColor(OLED_Color_Black);
+  screen->setTextColor(ILI9488_BLACK);
   for (uint8_t i = 0; i < last_songs.size(); i++) {
     screen->setCursor(0, settings_song_name_height * (i + 1));
     screen->print(last_songs[i].c_str());
@@ -255,7 +270,7 @@ void Screen::removeSongs(const std::vector<std::string> songs, uint8_t first_son
   screen->setFont(settings_song_name_font);
   screen->setTextSize(settings_song_name_size);
   screen->setTextWrap(false);
-  screen->setTextColor(OLED_Color_Black);
+  screen->setTextColor(ILI9488_BLACK);
   for (uint8_t i = 0; i < VISIBLE_SONGS + 1; i ++) {
     screen->setCursor(0, settings_song_name_height * (i + 1) + ypos);
     screen->print(songs[i + first_song].c_str());
@@ -292,7 +307,7 @@ void Screen::showTuningBackground()
 
 void Screen::showNote(char *note)
 {
-  screen->fillRect(0, 28, 28, 18, OLED_Color_Black);
+  screen->fillRect(0, 28, 28, 18, ILI9488_BLACK);
 
   screen->setFont(tuner_chord_font);
   screen->setTextSize(tuner_chord_font_size);
@@ -304,10 +319,10 @@ void Screen::showNote(char *note)
 void Screen::showTuning(uint8_t tuning, uint8_t last_tuning)
 {
   if (last_tuning < 60 || last_tuning > 67) {
-    screen->fillRect(40, 127 - last_tuning - 1, tuner_bar_width, 2, OLED_Color_Black);
+    screen->fillRect(40, 127 - last_tuning - 1, tuner_bar_width, 2, ILI9488_BLACK);
     screen->fillRect(50, 127 - last_tuning - 1, tuner_sides_width, 2, tuner_color_sides);
   } else {
-    screen->fillRect(40, 127 - last_tuning - 1, tuner_bar_width, 2, OLED_Color_Black);
+    screen->fillRect(40, 127 - last_tuning - 1, tuner_bar_width, 2, ILI9488_BLACK);
   }
 
   screen->fillRect(40, 127 - tuning - 1, tuner_bar_width, 2, tuner_color_tuning);
@@ -351,4 +366,29 @@ void Screen::showClock(int hours, int minutes, int seconds, int day, int month, 
   date_txt[9] = '0' + (year % 10);
   date_txt[10] = 0;
   screen->print(date_txt);
+}
+
+void Screen::writeButtonsMode(uint8_t mode)
+{
+  writeButtonsModeBackground(mode);
+  screen->setFont(status_bar_font);
+  screen->setTextSize(status_bar_size);
+  int text_color = effects_mode_color;
+  char mode_text[12] = "EFFECTS";
+  if (mode == 1) {
+    text_color = chords_mode_color;
+    strcpy(mode_text, "CHORDS");
+  }
+  screen->setTextColor(text_color);
+  screen->setCursor(getCenteredXFromTextInWidth(mode_text, buttons_mode_w), status_bar_text_y);
+  screen->print(mode_text);
+}
+
+void Screen::writeButtonsModeBackground(uint8_t mode)
+{
+  int background_color = effects_mode_background_color;
+  if (mode == 1) {
+    background_color = chords_mode_background_color;
+  }
+  screen->fillRect(buttons_mode_x, status_bar_y, buttons_mode_w, status_bar_h, background_color);
 }

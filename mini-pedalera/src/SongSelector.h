@@ -26,6 +26,7 @@ class SongSelector
     uint8_t number_of_buttons;
     uint8_t number_of_leds;
 
+    const uint8_t max_number_of_visible_songs = 10;
     const int LED_FLASHING_ON  = 500;
     const int LED_FLASHING_OFF = 500;
     const uint8_t leds_index[4] = {8, 9, 10, 11};

@@ -1,10 +1,13 @@
 #include "Button.h"
 
-Button::Button(uint8_t pin, uint8_t cc, uint8_t release_cc, uint8_t set_momentary_cc, uint8_t momentary_cc, uint8_t push_action, uint8_t hold_action, uint8_t settings_action)
+uint8_t Button::buttons_mode = BASS_MODE;
+
+Button::Button(uint8_t pin, uint8_t ccs[2], uint8_t release_cc, uint8_t set_momentary_cc, uint8_t momentary_cc, uint8_t push_action, uint8_t hold_action, uint8_t settings_action)
 {
   pinMode(pin, INPUT_PULLUP);
   button_pin = pin;
-  button_cc = cc;
+  button_ccs[0] = ccs[0];
+  button_ccs[1] = ccs[1];
   button_release_cc = release_cc;
   button_momentary = false;
   button_set_momentary_cc = set_momentary_cc;
@@ -18,9 +21,14 @@ Button::Button(uint8_t pin, uint8_t cc, uint8_t release_cc, uint8_t set_momentar
   button_debouncer->interval(debouncer_interval);
 }
 
+void Button::updateButtonsMode(uint8_t new_mode)
+{
+  buttons_mode = new_mode;
+}
+
 uint8_t Button::getButtonCc()
 {
-  return button_cc;
+  return button_ccs[buttons_mode];
 }
 
 uint8_t Button::changed()
@@ -30,7 +38,7 @@ uint8_t Button::changed()
     if (button_momentary) {
       sendControlChange(button_momentary_cc);
     } else {
-      sendControlChange(button_cc);
+      sendControlChange(button_ccs[buttons_mode]);
     }
     if (button_push_action > 0) {
       return button_push_action;

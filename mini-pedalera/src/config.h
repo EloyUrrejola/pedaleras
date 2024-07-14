@@ -1,0 +1,61 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#include "Button.h"
+#include "Led.h"
+
+extern const uint8_t BASS_BUTTON_CC;
+extern const uint8_t OCTAVE_BUTTON_CC;
+extern const uint8_t GUITAR_BUTTON_CC;
+extern const uint8_t REVERB_BUTTON_CC;
+extern const uint8_t TUNER_BUTTON_CC;
+extern const uint8_t CHORUS_BUTTON_CC;
+extern const uint8_t TEMPO_BUTTON_CC;
+extern const uint8_t MIDI_BUTTON_CC;
+extern const uint8_t A_CHORD_BUTTON_CC;
+extern const uint8_t B_CHORD_BUTTON_CC;
+extern const uint8_t C_CHORD_BUTTON_CC;
+extern const uint8_t D_CHORD_BUTTON_CC;
+extern const uint8_t RESET_BUTTON_CC;
+extern const uint8_t PLAY_1_BUTTON_CC;
+extern const uint8_t PLAY_2_BUTTON_CC;
+extern const uint8_t STOP_BUTTON_CC;
+extern const uint8_t PAGEUP_BUTTON_CC;
+extern const uint8_t PAGEDN_BUTTON_CC;
+extern const uint8_t NEXT_SONT_CC;
+extern const uint8_t GUITAR_SWICH_CC;
+extern const uint8_t MODE_CHANGE_CC;
+
+extern const uint8_t SETTINGS_ACTION;
+extern const uint8_t SONG_SELECTOR_ACTION;
+extern const uint8_t TUNER_ACTION;
+extern const uint8_t CLOCK_ACTION;
+extern const uint8_t NEXT_SONG_ACTION;
+extern const uint8_t MODE_ACTION;
+extern const uint8_t STOP_ACTION;
+
+extern const uint8_t BUTTON_PIN_CCS[2][9];
+
+extern const uint8_t button_pins[];
+// CCs al soltar el botón
+extern const uint8_t button_release_ccs[];
+// CCs recibidos para activar momentary_ccs, por ej. guitar MOD (89)
+extern const uint8_t button_momentary_set[];
+// Acción activada con button_momentary_set, por ej. guitar/bass (20)
+extern const uint8_t button_momentary_ccs[];
+// Tunner: tuner_mode (3)
+extern const uint8_t button_push_actions[];
+// Acciones pasado un intervalo de tiempo (300 ms)
+extern const uint8_t button_hold_actions[];
+// Botones usados para los settings
+extern const uint8_t settings_buttons[];
+
+extern const uint8_t led_pins[];
+extern const uint8_t led_ccs[];
+// 14,15,20,21,22,23,24,25,  26,27,28,29,85,86
+
+extern const int LED_FLASHING_ON;
+extern const int LED_FLASHING_OFF;
+extern const int LED_FLASHING_TIMES;
+
+#endif

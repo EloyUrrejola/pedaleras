@@ -2,6 +2,7 @@
 
 const char* MENU[] = {
   "Led Intensity",
+  "Screen Intensity",
   "Audio Out"
 };
 
@@ -14,6 +15,7 @@ const char* AUDIO_SUBMENU[] = {
 };
 
 const char** SUBMENUS[] = {
+  0,
   0,
   AUDIO_SUBMENU,
 };
