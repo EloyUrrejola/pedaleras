@@ -55,7 +55,8 @@ void setup()
     );
   }
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++) {
-    leds[i] = new Led(led_pins[i], led_ccs[i]);
+    uint8_t led_ccs_array[2] = {led_ccs[0][i], led_ccs[1][i]};
+    leds[i] = new Led(led_pins[i], led_ccs_array);
   }
 
   midi_message.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);

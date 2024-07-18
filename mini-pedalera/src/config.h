@@ -51,7 +51,7 @@ extern const uint8_t button_hold_actions[];
 extern const uint8_t settings_buttons[];
 
 extern const uint8_t led_pins[];
-extern const uint8_t led_ccs[];
+extern const uint8_t led_ccs[2][9];
 // 14,15,20,21,22,23,24,25,  26,27,28,29,85,86
 
 extern const int LED_FLASHING_ON;

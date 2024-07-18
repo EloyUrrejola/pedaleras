@@ -111,5 +111,6 @@ void MidiMessage::processModeMessage(uint8_t cc, uint8_t value)
 {
   uint8_t mode = (value == 127) ? 1 : 0;
   Button::updateButtonsMode(mode);
+  Led::updateLedsMode(mode);
   screen->writeButtonsMode(mode);
 }

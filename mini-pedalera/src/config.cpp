@@ -68,7 +68,14 @@ const uint8_t button_hold_actions[]    = { 0, 0, 0, 0, NEXT_SONG_ACTION, SETTING
 const uint8_t settings_buttons[]       = { 0, 0, 5, 6, 3, 8, 0, 1, 2};
 
 const uint8_t led_pins[]    = { 0, 1, 2, 3, 4, 5, 6, 7,24};
-const uint8_t led_ccs[]     = {CHORD_A_LED_CC, OCTAVE_LED_CC, GUITAR_LED_CC, REVERB_LED_CC, PAGEDN_LED_CC, RESET_LED_CC, PLAY_1_LED_CC, BASS_LED_CC, PAGEUP_LED_CC};
+const uint8_t led_ccs[2][9]     = {
+  {
+    CHORD_A_LED_CC, OCTAVE_LED_CC, GUITAR_LED_CC, REVERB_LED_CC, PAGEDN_LED_CC, RESET_LED_CC, PLAY_1_LED_CC, BASS_LED_CC, PAGEUP_LED_CC
+  },
+  {
+    CHORD_A_LED_CC, CHORD_B_LED_CC, CHORD_C_LED_CC, CHORD_D_LED_CC, PAGEDN_LED_CC, RESET_LED_CC, PLAY_1_LED_CC, BASS_LED_CC, PAGEUP_LED_CC
+  }
+};
 // 14,15,20,21,22,23,24,25,  26,27,28,29,85,86
 
 const int LED_FLASHING_ON  = 500;

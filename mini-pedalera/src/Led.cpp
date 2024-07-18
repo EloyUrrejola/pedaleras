@@ -1,13 +1,20 @@
 #include "Led.h"
 
+uint8_t Led::leds_mode = BASS_MODE;
 uint8_t Led::led_intensity_level = 1;
 const uint8_t Led::INTENSITIES[NUMBER_OF_LEVELS] = {5, 20, 127};
 
-Led::Led(uint8_t pin, uint8_t cc)
+Led::Led(uint8_t pin, uint8_t ccs[2])
 {
   pinMode(pin, OUTPUT);
   led_pin = pin;
-  led_cc = cc;
+  led_ccs[0] = ccs[0];
+  led_ccs[1] = ccs[1];
+}
+
+void Led::updateLedsMode(uint8_t new_mode)
+{
+  leds_mode = new_mode;
 }
 
 void Led::on()
@@ -88,5 +95,5 @@ void Led::setLedIntensityLevel(uint8_t intensity_level)
 
 uint8_t Led::getLedCc()
 {
-  return led_cc;
+  return led_ccs[leds_mode];
 }
