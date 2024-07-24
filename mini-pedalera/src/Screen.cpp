@@ -1,4 +1,5 @@
 #include "Screen.h"
+#include "Status.h"
 
 Screen::Screen(ILI9488_t3 *tft)
 {
@@ -368,11 +369,70 @@ void Screen::showClock(int hours, int minutes, int seconds, int day, int month, 
   screen->print(date_txt);
 }
 
+void Screen::writeStatusBar()
+{
+  const bool* params = Status::getAll();
+
+  screen->setFont(status_bar_font);
+  screen->setTextSize(status_bar_font_size);
+  uint8_t mode = params[0] ? 1 : 0;
+
+  writeButtonsMode(mode);
+  /*writeStatusParameter(
+    "BASS",
+    params[1] ? true : false,
+    bass_text_off_color,
+    bass_off_background_color,
+    bass_text_on_color,
+    bass_on_background_color,
+    bass_x,
+    bass_w
+  );*/
+  writeStatusParameter(
+    "OCTAVE",
+    params[2] ? true : false,
+    octave_text_off_color,
+    octave_off_background_color,
+    octave_text_on_color,
+    octave_on_background_color,
+    octave_x,
+    octave_w
+  );
+  writeStatusParameter(
+    "GUITAR",
+    params[3] ? true : false,
+    guitar_text_off_color,
+    guitar_off_background_color,
+    guitar_text_on_color,
+    guitar_on_background_color,
+    guitar_x,
+    guitar_w
+  );
+  writeStatusParameter(
+    "REVERB",
+    params[4] ? true : false,
+    reverb_text_off_color,
+    reverb_off_background_color,
+    reverb_text_on_color,
+    reverb_on_background_color,
+    reverb_x,
+    reverb_w
+  );
+  writeStatusParameter(
+    "CHORUS",
+    params[5] ? true : false,
+    chorus_text_off_color,
+    chorus_off_background_color,
+    chorus_text_on_color,
+    chorus_on_background_color,
+    chorus_x,
+    chorus_w
+  );
+}
+
 void Screen::writeButtonsMode(uint8_t mode)
 {
   writeButtonsModeBackground(mode);
-  screen->setFont(status_bar_font);
-  screen->setTextSize(status_bar_size);
   int text_color = effects_mode_color;
   char mode_text[12] = "EFFECTS";
   if (mode == 1) {
@@ -380,7 +440,7 @@ void Screen::writeButtonsMode(uint8_t mode)
     strcpy(mode_text, "CHORDS");
   }
   screen->setTextColor(text_color);
-  screen->setCursor(getCenteredXFromTextInWidth(mode_text, buttons_mode_w), status_bar_text_y);
+  screen->setCursor(buttons_mode_x + getCenteredXFromTextInWidth(mode_text, buttons_mode_w), status_bar_text_y);
   screen->print(mode_text);
 }
 
@@ -391,4 +451,27 @@ void Screen::writeButtonsModeBackground(uint8_t mode)
     background_color = chords_mode_background_color;
   }
   screen->fillRect(buttons_mode_x, status_bar_y, buttons_mode_w, status_bar_h, background_color);
+}
+
+void Screen::writeStatusParameter(
+  const char* parameter_text,
+  bool status,
+  int text_off_color,
+  int background_off_color,
+  int text_on_color,
+  int background_on_color,
+  uint16_t x,
+  uint16_t w
+)
+{
+  int text_color = text_off_color;
+  int background_color = background_off_color;
+  if (status) {
+    text_color = text_on_color;
+    background_color = background_on_color;
+  }
+  screen->fillRect(x, status_bar_y, w, status_bar_h, background_color);
+  screen->setTextColor(text_color);
+  screen->setCursor(x + getCenteredXFromTextInWidth(parameter_text, w), status_bar_text_y);
+  screen->print(parameter_text);
 }

@@ -26,6 +26,25 @@ extern const uint8_t NEXT_SONT_CC;
 extern const uint8_t GUITAR_SWICH_CC;
 extern const uint8_t MODE_CHANGE_CC;
 
+extern const uint8_t CHORD_A_LED_CC;
+extern const uint8_t OCTAVE_LED_CC;
+extern const uint8_t GUITAR_LED_CC;
+extern const uint8_t REVERB_LED_CC;
+extern const uint8_t CHORUS_LED_CC;
+extern const uint8_t PAGEDN_LED_CC;
+extern const uint8_t RESET_LED_CC;
+extern const uint8_t PLAY_1_LED_CC;
+extern const uint8_t BASS_LED_CC;
+extern const uint8_t PAGEUP_LED_CC;
+extern const uint8_t CHORD_B_LED_CC;
+extern const uint8_t CHORD_C_LED_CC;
+extern const uint8_t CHORD_D_LED_CC;
+
+extern const uint8_t LEDS_MIDI_CHANNEL;
+extern const uint8_t BUTTON_MODE_MIDI_CHANNEL;
+extern const uint8_t SETTING_CHANNEL;
+extern const uint8_t MODE_CHANNEL;
+
 extern const uint8_t SETTINGS_ACTION;
 extern const uint8_t SONG_SELECTOR_ACTION;
 extern const uint8_t TUNER_ACTION;
@@ -52,7 +71,6 @@ extern const uint8_t settings_buttons[];
 
 extern const uint8_t led_pins[];
 extern const uint8_t led_ccs[2][9];
-// 14,15,20,21,22,23,24,25,  26,27,28,29,85,86
 
 extern const int LED_FLASHING_ON;
 extern const int LED_FLASHING_OFF;

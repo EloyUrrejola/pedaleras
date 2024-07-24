@@ -43,7 +43,7 @@ class Screen
     void showTuningBackground();
     void showClockBackground();
     void showClock(int hours, int minutes, int seconds, int day, int month, int year);
-    void writeButtonsMode(uint8_t mode);
+    void writeStatusBar();
 
   private:
     void doSlide(const std::vector<std::string> songs, uint8_t first_song, uint8_t song_index, int direction);
@@ -52,7 +52,20 @@ class Screen
     void removeSongs(const std::vector<std::string> songs, uint8_t first_song, int ypos);
     void writeSongs(const std::vector<std::string> songs, uint8_t first_song, uint8_t number_of_songs, uint8_t selected_index, int ypos);
     float getY(int8_t start, int8_t end, uint8_t step, float total_steps);
+    void writeButtonsMode(uint8_t mode);
     void writeButtonsModeBackground(uint8_t mode);
+    //void writeBassStatus(bool status);
+    //void writeBassBackground(bool status);
+    void writeStatusParameter(
+      const char* parameter_text,
+      bool status,
+      int text_off_color,
+      int background_off_color,
+      int text_on_color,
+      int background_on_color,
+      uint16_t x,
+      uint16_t w
+    );
     
     const int INIT = 0;
     const int UP = -1;
@@ -127,18 +140,53 @@ class Screen
     const ILI9341_t3_font_t clock_date_font = Arial_20;
     const int clock_date_color = ILI9488_YELLOW;
 
-    const ILI9341_t3_font_t status_bar_font = LiberationSansNarrow_14_Bold;
-    const int status_bar_size = 1;
-    const uint16_t status_bar_y = 298;
-    const uint16_t status_bar_h = 21;
-    const uint16_t status_bar_text_y = 302;
+    const ILI9341_t3_font_t status_bar_font = LiberationSansNarrow_18_Bold;
+    const int status_bar_font_size = 1;
+    const uint16_t status_bar_y = 294;
+    const uint16_t status_bar_h = 25;
+    const uint16_t status_bar_text_y = 299;
 
     const int effects_mode_color = ILI9488_BLACK;
     const int effects_mode_background_color = 0x0DE8;
     const int chords_mode_color = ILI9488_BLACK;
     const int chords_mode_background_color = ILI9488_RED;
     const uint16_t buttons_mode_x = 0;
-    const uint16_t buttons_mode_w = 82;
+    const uint16_t buttons_mode_w = 98;
+
+    /*const int bass_on_background_color = ILI9488_CYAN;
+    const int bass_off_background_color = ILI9488_BLACK;
+    const int bass_text_on_color = ILI9488_BLACK;
+    const int bass_text_off_color = ILI9488_CYAN;
+    const uint16_t bass_x = 82;
+    const uint16_t bass_w = 60;*/
+
+    const int octave_on_background_color = ILI9488_CYAN;
+    const int octave_off_background_color = ILI9488_BLACK;
+    const int octave_text_on_color = ILI9488_BLACK;
+    const int octave_text_off_color = ILI9488_CYAN;
+    const uint16_t octave_x = 98;
+    const uint16_t octave_w = 98;
+
+    const int guitar_on_background_color = ILI9488_YELLOW;
+    const int guitar_off_background_color = ILI9488_BLACK;
+    const int guitar_text_on_color = ILI9488_BLACK;
+    const int guitar_text_off_color = ILI9488_YELLOW;
+    const uint16_t guitar_x = 196;
+    const uint16_t guitar_w = 88;
+
+    const int reverb_on_background_color = ILI9488_CYAN;
+    const int reverb_off_background_color = ILI9488_BLACK;
+    const int reverb_text_on_color = ILI9488_BLACK;
+    const int reverb_text_off_color = ILI9488_CYAN;
+    const uint16_t reverb_x = 284;
+    const uint16_t reverb_w = 100;
+
+    const int chorus_on_background_color = ILI9488_GREEN;
+    const int chorus_off_background_color = ILI9488_BLACK;
+    const int chorus_text_on_color = ILI9488_BLACK;
+    const int chorus_text_off_color = ILI9488_GREEN;
+    const uint16_t chorus_x = 384;
+    const uint16_t chorus_w = 95;
 
     ILI9488_t3 *screen;
     void     removeMessage();

@@ -1,7 +1,7 @@
 #include "Settings.h"
 
-const uint8_t Settings::_menu_min_options[NUMBER_OF_MENU_OPTIONS] = {1, 1, 0};
-const uint8_t Settings::_menu_max_options[NUMBER_OF_MENU_OPTIONS] = {3, 3, 0};
+const uint8_t Settings::_menu_min_options[NUMBER_OF_MENU_OPTIONS] = {0, 0, 0};
+const uint8_t Settings::_menu_max_options[NUMBER_OF_MENU_OPTIONS] = {127, 127, 0};
 const uint8_t Settings::_audio_min_options[5] = {0,0,0,0,0};
 const uint8_t Settings::_audio_max_options[5] = {1,10,10,10,10};
 const uint8_t* Settings::_submenu_min_options[NUMBER_OF_MENU_OPTIONS] = {nullptr, nullptr, _audio_min_options};
@@ -49,7 +49,7 @@ void Settings::startSettingsMode()
 {
   screen->clean();
   screen->writeSettingsTitle(settings_title);
-  //startFlashingLeds();
+  startFlashingLeds();
 }
 
 void Settings::settingsMode()
@@ -66,7 +66,7 @@ void Settings::settingsMode()
   showMenuOptions(menu_options, number_of_options, selected_option, option_values, max_values);
 
   while (settings_mode) {
-    //updateFlashingLeds();
+    updateFlashingLeds();
     for (uint8_t i = 0; i < _number_of_setting_buttons; i++) {
       uint8_t action = buttons[_buttons_index[i]]->settingsChanged();
       changeOption(action, menu_options, number_of_options, selected_option, option_values, max_values);
@@ -135,7 +135,7 @@ void Settings::editOption(char **menu_options, uint8_t number_of_options, uint8_
   uint8_t initial_option_value = option_value;
   showMenuOptionEdition(menu_options, number_of_options, selected_option, option_value);
   while (options_mode) {
-    //updateFlashingLeds();
+    updateFlashingLeds();
     for (uint8_t i = 0; i < _number_of_setting_buttons; i++) {
       uint8_t action = buttons[_buttons_index[i]]->settingsChanged();
       if (isValueChange(action, selected_option, option_value, min_value, max_value)) {
@@ -248,7 +248,5 @@ void Settings::showMenuOptionEdition(char **menu_options, uint8_t number_of_opti
 
 void Settings::exitSettingsMode()
 {
-  for (uint8_t i = 0; i < _number_of_leds_flashing; i++) {
-    //leds[_leds_index[i]]->off();
-  }
+  Led::setStatusLeds(leds);
 }

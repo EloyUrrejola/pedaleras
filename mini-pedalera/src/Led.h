@@ -16,12 +16,11 @@ class Led
     static void setLedIntensityLevel(uint8_t intensity_level);
     uint8_t getLedCc();
     static void updateLedsMode(uint8_t);
+    static void setStatusLeds(Led **leds);
     
   private:
     const bool ON = true;
     const bool OFF = false;
-    static const uint8_t NUMBER_OF_LEVELS = 3;
-    static const uint8_t INTENSITIES[];
     static const uint8_t BASS_MODE = 0;
 
     static uint8_t leds_mode;

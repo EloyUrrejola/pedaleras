@@ -21,10 +21,13 @@ const uint8_t PAGEDN_BUTTON_CC = 30;
 const uint8_t NEXT_SONT_CC = 91;
 const uint8_t GUITAR_SWICH_CC = 89;
 
+const uint8_t MODE_CHANGE_CC = 3;
+
 const uint8_t CHORD_A_LED_CC = 26;
 const uint8_t OCTAVE_LED_CC = 15;
 const uint8_t GUITAR_LED_CC = 20;
 const uint8_t REVERB_LED_CC = 21;
+const uint8_t CHORUS_LED_CC = 23;
 const uint8_t PAGEDN_LED_CC = 30;
 const uint8_t RESET_LED_CC = 31;
 const uint8_t PLAY_1_LED_CC = 85;
@@ -33,6 +36,11 @@ const uint8_t PAGEUP_LED_CC = 88;
 const uint8_t CHORD_B_LED_CC = 27;
 const uint8_t CHORD_C_LED_CC = 28;
 const uint8_t CHORD_D_LED_CC = 29;
+
+const uint8_t LEDS_MIDI_CHANNEL = 2;
+const uint8_t BUTTON_MODE_MIDI_CHANNEL = 3;
+const uint8_t SETTING_CHANNEL = 4;
+const uint8_t MODE_CHANNEL = 5;
 
 const uint8_t SETTINGS_ACTION = 1;
 const uint8_t SONG_SELECTOR_ACTION = 2;
@@ -68,7 +76,7 @@ const uint8_t button_hold_actions[]    = { 0, 0, 0, 0, NEXT_SONG_ACTION, SETTING
 const uint8_t settings_buttons[]       = { 0, 0, 5, 6, 3, 8, 0, 1, 2};
 
 const uint8_t led_pins[]    = { 0, 1, 2, 3, 4, 5, 6, 7,24};
-const uint8_t led_ccs[2][9]     = {
+const uint8_t led_ccs[2][9] = {
   {
     CHORD_A_LED_CC, OCTAVE_LED_CC, GUITAR_LED_CC, REVERB_LED_CC, PAGEDN_LED_CC, RESET_LED_CC, PLAY_1_LED_CC, BASS_LED_CC, PAGEUP_LED_CC
   },

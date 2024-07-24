@@ -1,8 +1,8 @@
 #include "Led.h"
+#include "Status.h"
 
 uint8_t Led::leds_mode = BASS_MODE;
-uint8_t Led::led_intensity_level = 1;
-const uint8_t Led::INTENSITIES[NUMBER_OF_LEVELS] = {5, 20, 127};
+uint8_t Led::led_intensity_level = 5;
 
 Led::Led(uint8_t pin, uint8_t ccs[2])
 {
@@ -19,7 +19,7 @@ void Led::updateLedsMode(uint8_t new_mode)
 
 void Led::on()
 {
-  analogWrite(led_pin, Led::INTENSITIES[led_intensity_level]);
+  analogWrite(led_pin, led_intensity_level);
 }
 
 void Led::off()
@@ -83,17 +83,68 @@ bool Led::flashUpdateTimes()
 
 uint8_t Led::getLedIntensityLevel()
 {
-  Serial.println("LED");
-  Serial.println(Led::led_intensity_level);
-  return Led::led_intensity_level + 1;
+  return Led::led_intensity_level;
 }
 
 void Led::setLedIntensityLevel(uint8_t intensity_level)
 {
-  Led::led_intensity_level = intensity_level - 1;
+  Led::led_intensity_level = intensity_level;
 }
 
 uint8_t Led::getLedCc()
 {
   return led_ccs[leds_mode];
+}
+
+void Led::setStatusLeds(Led **leds)
+{
+  const bool* params = Status::getAll();
+  if (params[7]) {
+    leds[0]->on();
+  } else {
+    leds[0]->off();
+  }
+  if (params[0]) {
+    if (params[8]) {
+      leds[1]->on();
+    } else {
+      leds[1]->off();
+    }
+    if (params[9]) {
+      leds[2]->on();
+    } else {
+      leds[2]->off();
+    }
+    if (params[10]) {
+      leds[3]->on();
+    } else {
+      leds[3]->off();
+    }
+  } else {
+    if (params[2]) {
+      leds[1]->on();
+    } else {
+      leds[1]->off();
+    }
+    if (params[3]) {
+      leds[2]->on();
+    } else {
+      leds[2]->off();
+    }
+    if (params[4]) {
+      leds[3]->on();
+    } else {
+      leds[3]->off();
+    }
+  }
+  if (params[6]) {
+    leds[6]->on();
+  } else {
+    leds[6]->off();
+  }
+  if (params[1]) {
+    leds[7]->on();
+  } else {
+    leds[7]->off();
+  }
 }

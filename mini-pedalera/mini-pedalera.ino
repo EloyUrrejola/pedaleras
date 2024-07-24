@@ -78,9 +78,10 @@ void start()
   screen.clean();
   screen.writeMessage("READY", "");
   flash_leds(LED_FLASHING_TIMES);
-  // Hay que dar tiempo a que se GP conecte con el puerto USB.
+  // Hay que dar tiempo a que GP conecte con el puerto USB.
   // Habrá que hacer un ping antes.
   delay(1000);
+  screen.writeStatusBar();
   requestSetlist();
 }
 
@@ -123,7 +124,7 @@ void flash_leds(int times)
 
 void leds_flash_update()
 {
-  bool leds_flashing[] = {true,true,true,true,true,true,true,true,true,true,true,true,true,true};
+  bool leds_flashing[] = {true,true,true,true,true,true,true,true,true};
   while (any_led_flashing(leds_flashing)) {
     for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++) {
       leds_flashing[i] = leds[i]->flashUpdateTimes();
@@ -207,6 +208,7 @@ void exitSongSelectorMode()
 {
   screen.clean();
   screen.writeSongAndPart();
+  screen.writeStatusBar();
 }
 
 void tunerMode()

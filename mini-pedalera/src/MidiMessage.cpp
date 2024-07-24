@@ -24,9 +24,9 @@ void MidiMessage::process(uint8_t channel, uint8_t control, uint8_t value)
   if (isSettingMessage(channel)) {
     processSettingMessage(control, value);
   }
-  if (isModeMessage(channel)) {
+  /*if (isModeMessage(channel)) {
     processModeMessage(control, value);
-  }
+  }*/
 }
 
 bool MidiMessage::isLedMessage(uint8_t channel)
@@ -53,24 +53,33 @@ bool MidiMessage::isSettingMessage(uint8_t channel)
   return false;
 }
 
-bool MidiMessage::isModeMessage(uint8_t channel)
+/*bool MidiMessage::isModeMessage(uint8_t channel)
 {
   if (channel == MODE_CHANNEL) {
     return true;
   }
   return false;
-}
+}*/
 
 void MidiMessage::processLedMessage(uint8_t cc, uint8_t value)
 {
   int led_index = getLedIndexByCc(cc);
+  bool status = false;
+  if (value == 127) {
+    status = true;
+  }
   if (led_index > -1) {
-    if (value == 127) {
+    if (status) {
       leds[led_index]->on();
     } else {
       leds[led_index]->off();
     }
   }
+  if (cc == MODE_CHANGE_CC) {
+    processModeMessage(cc, value);
+  }
+  Status::setParameter(cc, status);
+  screen->writeStatusBar();
 }
 
 void MidiMessage::processButtonModeMessage(uint8_t cc, uint8_t value)
@@ -112,5 +121,4 @@ void MidiMessage::processModeMessage(uint8_t cc, uint8_t value)
   uint8_t mode = (value == 127) ? 1 : 0;
   Button::updateButtonsMode(mode);
   Led::updateLedsMode(mode);
-  screen->writeButtonsMode(mode);
 }
