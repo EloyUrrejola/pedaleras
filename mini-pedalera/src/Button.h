@@ -37,6 +37,7 @@ class Button
     uint8_t button_momentary_cc;
     uint8_t button_push_action;
     uint8_t button_hold_action;
+    int button_hold_time;
     uint8_t button_settings_action;
     bool button_pressed;
     unsigned long button_time_now;

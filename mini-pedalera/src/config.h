@@ -66,6 +66,8 @@ extern const uint8_t button_momentary_ccs[];
 extern const uint8_t button_push_actions[];
 // Acciones pasado un intervalo de tiempo (300 ms)
 extern const uint8_t button_hold_actions[];
+// Tiempo de pulsado de cada botón en ms
+extern const int     button_hold_times[];
 // Botones usados para los settings
 extern const uint8_t settings_buttons[];
 

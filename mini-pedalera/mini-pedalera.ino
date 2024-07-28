@@ -47,6 +47,7 @@ void setup()
       button_momentary_ccs[i],
       button_push_actions[i],
       button_hold_actions[i],
+      button_hold_times[i],
       settings_buttons[i]
     );
   }

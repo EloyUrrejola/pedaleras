@@ -2,7 +2,7 @@
 
 uint8_t Button::buttons_mode = BASS_MODE;
 
-Button::Button(uint8_t pin, uint8_t ccs[2], uint8_t release_cc, uint8_t set_momentary_cc, uint8_t momentary_cc, uint8_t push_action, uint8_t hold_action, uint8_t settings_action)
+Button::Button(uint8_t pin, uint8_t ccs[2], uint8_t release_cc, uint8_t set_momentary_cc, uint8_t momentary_cc, uint8_t push_action, uint8_t hold_action, int hold_time, uint8_t settings_action)
 {
   pinMode(pin, INPUT_PULLUP);
   button_pin = pin;
@@ -14,6 +14,7 @@ Button::Button(uint8_t pin, uint8_t ccs[2], uint8_t release_cc, uint8_t set_mome
   button_momentary_cc = momentary_cc;
   button_push_action = push_action;
   button_hold_action = hold_action;
+  button_hold_time = hold_time;
   button_settings_action = settings_action;
   button_pressed = false;
   button_debouncer = new Bounce();
@@ -60,7 +61,7 @@ uint8_t Button::changed()
   }
   if (button_pressed) {
     button_time_now = millis();
-    if (button_time_now - button_time_start > ACTION_TIME) {
+    if (button_time_now - button_time_start > button_hold_time) {
       button_pressed = false;
       return button_hold_action;
     }

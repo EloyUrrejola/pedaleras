@@ -72,6 +72,8 @@ const uint8_t button_momentary_ccs[]   = { 0, 0, 0, GUITAR_BUTTON_CC, 0, 0, 0, 0
 const uint8_t button_push_actions[]    = { 0, 0, 0, 0, 0, 0, 0, 0, 0};
 // Acciones pasado un intervalo de tiempo (300 ms)
 const uint8_t button_hold_actions[]    = { 0, 0, 0, 0, NEXT_SONG_ACTION, SETTINGS_ACTION, STOP_ACTION, TUNER_ACTION, SONG_SELECTOR_ACTION};
+// Tiempo de pulsado de cada botón en ms
+const int     button_hold_times[]       = { 0, 0, 0, 0, 1000, 1000, 300, 300, 300};
 // Botones usados para los settings
 const uint8_t settings_buttons[]       = { 0, 0, 5, 6, 3, 8, 0, 1, 2};
 
