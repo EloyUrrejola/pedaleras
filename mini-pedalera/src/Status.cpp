@@ -28,14 +28,15 @@ const Status::Mapping Status::mapping[] = {
 
 const uint8_t Status::NUM_PARAMS = sizeof(Status::mapping) / sizeof(Status::mapping[0]);
 
-void Status::setParameter(uint8_t cc, bool status)
+int Status::setParameter(uint8_t cc, bool state)
 {
   for (uint8_t i = 0; i < NUM_PARAMS; ++i) {
     if (mapping[i].cc == cc) {
-        *(mapping[i].status) = status;
-        break;
+        *(mapping[i].state) = state;
+        return i;
     }
   }
+  return -1;
 }
 
 const bool* Status::getAll()

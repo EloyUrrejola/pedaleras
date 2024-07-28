@@ -1,4 +1,5 @@
 #include "SysExMessage.h"
+#include "Led.h"
 
 SysExMessage::SysExMessage()
 {
@@ -121,6 +122,7 @@ void SysExMessage::getSongAndPartFromMessage(std::string message)
 
   SongList::setCurrentPart(current_part);
   screen->writeSongAndPart();
+  Led::setStatusLeds();
 }
 
 uint8_t SysExMessage::getSongIndexFromMessage(std::string message)

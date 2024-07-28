@@ -4,13 +4,11 @@ MidiMessage::MidiMessage()
 {
 }
 
-void MidiMessage::init(Screen *screen, Button* buttons[], uint8_t number_of_buttons, Led* leds[], uint8_t number_of_leds)
+void MidiMessage::init(Screen *screen, Button* buttons[], uint8_t number_of_buttons)
 {
   this->screen = screen;
   this->buttons = buttons;
   this->number_of_buttons = number_of_buttons;
-  this->leds = leds;
-  this->number_of_leds = number_of_leds;
 }
 
 void MidiMessage::process(uint8_t channel, uint8_t control, uint8_t value)
@@ -24,9 +22,6 @@ void MidiMessage::process(uint8_t channel, uint8_t control, uint8_t value)
   if (isSettingMessage(channel)) {
     processSettingMessage(control, value);
   }
-  /*if (isModeMessage(channel)) {
-    processModeMessage(control, value);
-  }*/
 }
 
 bool MidiMessage::isLedMessage(uint8_t channel)
@@ -53,52 +48,26 @@ bool MidiMessage::isSettingMessage(uint8_t channel)
   return false;
 }
 
-/*bool MidiMessage::isModeMessage(uint8_t channel)
-{
-  if (channel == MODE_CHANNEL) {
-    return true;
-  }
-  return false;
-}*/
-
 void MidiMessage::processLedMessage(uint8_t cc, uint8_t value)
 {
-  int led_index = getLedIndexByCc(cc);
-  bool status = false;
-  if (value == 127) {
-    status = true;
-  }
-  if (led_index > -1) {
-    if (status) {
-      leds[led_index]->on();
-    } else {
-      leds[led_index]->off();
-    }
-  }
+  bool state = valueToState(value);
+  Led::setLedState(cc, state);
+  
   if (cc == MODE_CHANGE_CC) {
     processModeMessage(cc, value);
   }
-  Status::setParameter(cc, status);
-  screen->writeStatusBar();
+  int param_index = Status::setParameter(cc, state);
+  if (param_index >= 0) {
+    screen->writeStatusBarParameter(param_index, state);
+  }
 }
 
 void MidiMessage::processButtonModeMessage(uint8_t cc, uint8_t value)
 {
   int button_index = getButtonIndexBySetMomentaryCc(cc);
   if (button_index > -1) {
-    bool momentary_state = (value == 127) ? true : false;
-    buttons[button_index]->changeMomentary(momentary_state);
+    buttons[button_index]->changeMomentary(valueToState(value));
   }
-}
-
-int MidiMessage::getLedIndexByCc(uint8_t cc)
-{
-  for (uint8_t i = 0; i < number_of_leds; i++) {
-    if (cc == leds[i]->getLedCc()) {
-      return i;
-    }
-  }
-  return -1;
 }
 
 int MidiMessage::getButtonIndexBySetMomentaryCc(uint8_t cc)
@@ -118,7 +87,16 @@ void MidiMessage::processSettingMessage(uint8_t cc, uint8_t value)
 
 void MidiMessage::processModeMessage(uint8_t cc, uint8_t value)
 {
-  uint8_t mode = (value == 127) ? 1 : 0;
+  uint8_t mode = (valueToState(value)) ? 1 : 0;
   Button::updateButtonsMode(mode);
   Led::updateLedsMode(mode);
+}
+
+bool MidiMessage::valueToState(uint8_t value)
+{
+  bool state = false;
+  if (value == 127) {
+    state = true;
+  }
+  return state;
 }

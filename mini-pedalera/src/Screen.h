@@ -19,7 +19,7 @@
 #include <font_LiberationSansBold.h>
 #include <font_LiberationSansNarrowBold.h>
 
-#define TFT_VCC 6
+#define TFT_VCC 28
 
 class Screen
 {
@@ -44,6 +44,7 @@ class Screen
     void showClockBackground();
     void showClock(int hours, int minutes, int seconds, int day, int month, int year);
     void writeStatusBar();
+    void writeStatusBarParameter(uint8_t param_index, bool state);
 
   private:
     void doSlide(const std::vector<std::string> songs, uint8_t first_song, uint8_t song_index, int direction);

@@ -11,12 +11,12 @@ void Screen::begin()
   screen->begin();
   screen->setRotation(3);
   pinMode(TFT_VCC, OUTPUT);
-  setBacklightLevel(3);
+  setBacklightLevel(120);
 }
 
 void Screen::setBacklightLevel(uint8_t backlight_level)
 {
-  //analogWrite(TFT_VCC, backlight_level);
+  analogWrite(TFT_VCC, backlight_level);
 }
 
 void Screen::clean()
@@ -367,6 +367,64 @@ void Screen::showClock(int hours, int minutes, int seconds, int day, int month, 
   date_txt[9] = '0' + (year % 10);
   date_txt[10] = 0;
   screen->print(date_txt);
+}
+
+void Screen::writeStatusBarParameter(uint8_t param_index, bool state)
+{
+  screen->setFont(status_bar_font);
+  screen->setTextSize(status_bar_font_size);
+  
+  if (param_index == 0) {
+    writeButtonsMode(state ? 1 : 0);
+  }
+  if (param_index == 2) {
+    writeStatusParameter(
+      "OCTAVE",
+      state,
+      octave_text_off_color,
+      octave_off_background_color,
+      octave_text_on_color,
+      octave_on_background_color,
+      octave_x,
+      octave_w
+    );
+  }
+  if (param_index == 3) {
+    writeStatusParameter(
+      "GUITAR",
+      state,
+      guitar_text_off_color,
+      guitar_off_background_color,
+      guitar_text_on_color,
+      guitar_on_background_color,
+      guitar_x,
+      guitar_w
+    );
+  }
+  if (param_index == 4) {
+    writeStatusParameter(
+      "REVERB",
+      state,
+      reverb_text_off_color,
+      reverb_off_background_color,
+      reverb_text_on_color,
+      reverb_on_background_color,
+      reverb_x,
+      reverb_w
+    );
+  }
+  if (param_index == 5) {
+    writeStatusParameter(
+      "CHORUS",
+      state,
+      chorus_text_off_color,
+      chorus_off_background_color,
+      chorus_text_on_color,
+      chorus_on_background_color,
+      chorus_x,
+      chorus_w
+    );
+  }
 }
 
 void Screen::writeStatusBar()

@@ -4,13 +4,11 @@ SongSelector::SongSelector()
 {
 }
 
-void SongSelector::init(Screen *screen, Button **buttons, uint8_t number_of_buttons, Led **leds, uint8_t number_of_leds)
+void SongSelector::init(Screen *screen, Button **buttons, uint8_t number_of_buttons)
 {
   this->screen = screen;
   this->buttons = buttons;
   this->number_of_buttons = number_of_buttons;
-  this->leds = leds;
-  this->number_of_leds = number_of_leds;
 }
 
 void SongSelector::startSongSelectorMode()
@@ -18,9 +16,7 @@ void SongSelector::startSongSelectorMode()
   temp_song_index = SongList::getCurrentSongIndex();
   song_list = SongList::getSongList();
   screen->clean();
-  for (uint8_t i = 0; i < 4; i++) {
-//    leds[leds_index[i]]->flash(LED_FLASHING_ON, LED_FLASHING_OFF, -1);
-  }
+  Led::startFlashingLeds(leds_index, number_of_leds_flashing);
   showSongSelectorPanel(temp_song_index, INIT);
 }
 
@@ -28,9 +24,7 @@ void SongSelector::songSelectorMode()
 {
   bool settings_mode = true;
   while (settings_mode) {
-    for (uint8_t i = 0; i < 4; i++) {
-//      leds[leds_index[i]]->flashUpdate();
-    }
+    Led::updateFlashingLeds(leds_index, number_of_leds_flashing);
     for (uint8_t i = 0; i < number_of_buttons; i++) {
       uint8_t action = buttons[i]->settingsChanged();
       if (action == _pg_up && temp_song_index > 0) {
@@ -58,9 +52,6 @@ void SongSelector::songSelectorMode()
 
 void SongSelector::exitSongSelectorMode()
 {
-  for (uint8_t i = 0; i < 4; i++) {
-    leds[leds_index[i]]->off();
-  }
 }
 
 void SongSelector::showSongSelectorPanel(uint8_t song_index, int direction)

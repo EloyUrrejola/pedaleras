@@ -23,7 +23,7 @@ class Button
     const uint8_t top_velocity = 127;
     const uint8_t low_velocity = 0;
     const uint8_t debouncer_interval = 5;
-    const uint16_t ACTION_TIME = 1000;
+    const uint16_t ACTION_TIME = 600;
     const uint16_t CONTINUOUS_DELAY = 0;
     static const uint8_t BASS_MODE = 0;
     static const uint8_t CHORD_MODE = 1;

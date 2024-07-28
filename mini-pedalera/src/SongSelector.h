@@ -14,7 +14,7 @@ class SongSelector
 {
   public:
     SongSelector();
-    void init(Screen *screen, Button **buttons, uint8_t number_of_buttons, Led **leds, uint8_t number_of_leds);
+    void init(Screen *screen, Button **buttons, uint8_t number_of_buttons);
     void startSongSelectorMode();
     void songSelectorMode();
     void exitSongSelectorMode();
@@ -22,14 +22,13 @@ class SongSelector
   private:
     Screen *screen;
     Button **buttons;
-    Led    **leds;
     uint8_t number_of_buttons;
-    uint8_t number_of_leds;
 
     const uint8_t max_number_of_visible_songs = 10;
     const int LED_FLASHING_ON  = 500;
     const int LED_FLASHING_OFF = 500;
-    const uint8_t leds_index[4] = {8, 9, 10, 11};
+    const uint8_t number_of_leds_flashing = 4;
+    const uint8_t leds_index[4] = {3, 4, 7, 8};
     const uint8_t _cancel = 1;
     const uint8_t _pg_up = 2;
     const uint8_t _pd_dn = 3;

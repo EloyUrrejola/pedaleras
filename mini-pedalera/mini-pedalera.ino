@@ -15,11 +15,7 @@
 #include "src/SysExMessage.h"
 #include "src/Tuner.h"
 
-const uint8_t NUMBER_OF_BUTTONS = 9;
-const uint8_t NUMBER_OF_LEDS = 9;
-
-Button *buttons[NUMBER_OF_BUTTONS];
-Led *leds[NUMBER_OF_LEDS];
+Button *buttons[9];
 
 MidiMessage midi_message;
 SysExMessage sysex_message;
@@ -54,17 +50,15 @@ void setup()
       settings_buttons[i]
     );
   }
-  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++) {
-    uint8_t led_ccs_array[2] = {led_ccs[0][i], led_ccs[1][i]};
-    leds[i] = new Led(led_pins[i], led_ccs_array);
-  }
 
-  midi_message.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
+  midi_message.init(&screen, buttons, NUMBER_OF_BUTTONS);
   sysex_message.init(&screen);
-  song_selector.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
-  settings.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
-  tuner.init(&screen, buttons, NUMBER_OF_BUTTONS, leds, NUMBER_OF_LEDS);
+  song_selector.init(&screen, buttons, NUMBER_OF_BUTTONS);
+  settings.init(&screen, buttons, NUMBER_OF_BUTTONS);
+  tuner.init(&screen, buttons, NUMBER_OF_BUTTONS);
   my_clock.init(&screen);
+
+  Led::init();
 
   usbMIDI.setHandleControlChange(receiveMidiMessage);
   usbMIDI.setHandleSystemExclusive(receiveSysEx);
@@ -77,7 +71,7 @@ void start()
 {
   screen.clean();
   screen.writeMessage("READY", "");
-  flash_leds(LED_FLASHING_TIMES);
+  Led::flashLeds(LED_FLASHING_TIMES);
   // Hay que dar tiempo a que GP conecte con el puerto USB.
   // Habrá que hacer un ping antes.
   delay(1000);
@@ -112,34 +106,6 @@ void loop()
     }
   }
   usbMIDI.read();
-}
-
-void flash_leds(int times)
-{
-  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++) {
-    leds[i]->flash(LED_FLASHING_ON, LED_FLASHING_OFF, times);
-  }
-  leds_flash_update();
-}
-
-void leds_flash_update()
-{
-  bool leds_flashing[] = {true,true,true,true,true,true,true,true,true};
-  while (any_led_flashing(leds_flashing)) {
-    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++) {
-      leds_flashing[i] = leds[i]->flashUpdateTimes();
-    }
-  }
-}
-
-bool any_led_flashing(bool leds_flashing[])
-{
-  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++) {
-    if (leds_flashing[i]) {
-      return true;
-    }
-  }
-  return false;
 }
 
 void receiveMidiMessage(uint8_t channel, uint8_t control, uint8_t value)
@@ -190,6 +156,8 @@ void exitSettingsMode()
 {
   screen.clean();
   screen.writeSongAndPart();
+  screen.writeStatusBar();
+  Led::setStatusLeds();
 }
 
 void songSelectorMode()
@@ -209,6 +177,7 @@ void exitSongSelectorMode()
   screen.clean();
   screen.writeSongAndPart();
   screen.writeStatusBar();
+  Led::setStatusLeds();
 }
 
 void tunerMode()

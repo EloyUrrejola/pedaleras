@@ -1,8 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "Button.h"
-#include "Led.h"
+#include <stdint.h>
 
 extern const uint8_t BASS_BUTTON_CC;
 extern const uint8_t OCTAVE_BUTTON_CC;
@@ -53,7 +52,8 @@ extern const uint8_t NEXT_SONG_ACTION;
 extern const uint8_t MODE_ACTION;
 extern const uint8_t STOP_ACTION;
 
-extern const uint8_t BUTTON_PIN_CCS[2][9];
+constexpr uint8_t NUMBER_OF_BUTTONS = 9;
+extern const uint8_t BUTTON_PIN_CCS[2][NUMBER_OF_BUTTONS];
 
 extern const uint8_t button_pins[];
 // CCs al soltar el botón
@@ -69,8 +69,10 @@ extern const uint8_t button_hold_actions[];
 // Botones usados para los settings
 extern const uint8_t settings_buttons[];
 
+constexpr uint8_t NUMBER_OF_LEDS = 9;
+extern const uint8_t led_ccs[2][NUMBER_OF_LEDS];
+extern const uint8_t LED_CCS[2][NUMBER_OF_LEDS];
 extern const uint8_t led_pins[];
-extern const uint8_t led_ccs[2][9];
 
 extern const int LED_FLASHING_ON;
 extern const int LED_FLASHING_OFF;

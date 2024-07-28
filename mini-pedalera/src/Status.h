@@ -6,7 +6,7 @@
 class Status
 {
   public:
-    static void setParameter(uint8_t cc, bool status);
+    static int setParameter(uint8_t cc, bool state);
     static const bool* getAll(); 
     
   private:
@@ -24,7 +24,7 @@ class Status
 
     struct Mapping {
         uint8_t cc;
-        bool* status;
+        bool* state;
     };
 
     static const Mapping mapping[];

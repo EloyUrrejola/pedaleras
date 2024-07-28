@@ -4,13 +4,11 @@ Tuner::Tuner()
 {
 }
 
-void Tuner::init(Screen *screen, Button **buttons, uint8_t number_of_buttons, Led **leds, uint8_t number_of_leds)
+void Tuner::init(Screen *screen, Button **buttons, uint8_t number_of_buttons)
 {
   this->screen = screen;
   this->buttons = buttons;
   this->number_of_buttons = number_of_buttons;
-  this->leds = leds;
-  this->number_of_leds = number_of_leds;
 }
 
 void Tuner::startTunerMode()
@@ -28,9 +26,7 @@ void Tuner::tunerMode()
   char note[3];
   uint8_t last_tuning = 0;
   while (tuner_mode) {
-    for (uint8_t i = 0; i < _number_of_leds_flashing; i++) {
-      leds[_leds_flashing_index[i]]->flashUpdate();
-    }
+    Led::updateFlashingLeds(_leds_flashing_index, _number_of_leds_flashing);
     for (uint8_t i = 0; i < number_of_buttons; i++) {
       uint8_t action = buttons[i]->settingsChanged();
       if (action == _exit) {
@@ -72,5 +68,5 @@ void Tuner::showLedTuning(uint8_t tuning)
 
 void Tuner::exitTunerMode()
 {
-  
+  Led::setStatusLeds();
 }

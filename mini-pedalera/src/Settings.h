@@ -11,7 +11,7 @@ class Settings
 {
   public:
     Settings();
-    void init(Screen *screen, Button **buttons, const uint8_t number_of_buttons, Led **leds, const uint8_t number_of_leds);
+    void init(Screen *screen, Button **buttons, const uint8_t number_of_buttons);
     static void setSettingValue(uint8_t cc, uint8_t value);
     void startSettingsMode();
     void settingsMode();
@@ -19,9 +19,7 @@ class Settings
   private:
     Screen *screen;
     Button **buttons;
-    Led    **leds;
     uint8_t number_of_buttons;
-    uint8_t number_of_leds;
 
     const uint8_t _number_of_setting_buttons = 4;
     const uint8_t _buttons_index[4] = {3,4,7,8};
@@ -62,8 +60,6 @@ class Settings
 
     const uint8_t _settings_midi_chanel = 4;
 
-    void startFlashingLeds();
-    void updateFlashingLeds();
     bool isMenuOptionChange(uint8_t action, uint8_t number_of_options, uint8_t selected_menu);
     void changeOption(uint8_t action, char **menu_options, uint8_t number_of_options, uint8_t &selected_option, uint8_t *option_values, uint8_t *max_values);
     void selectSubmenu(char **&menu_options, uint8_t &number_of_options, uint8_t &selected_option, uint8_t *&option_values, uint8_t *&min_values, uint8_t *&max_values, uint8_t *&option_ccs);
