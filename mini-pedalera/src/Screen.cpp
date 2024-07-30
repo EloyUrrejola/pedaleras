@@ -11,7 +11,7 @@ void Screen::begin()
   screen->begin();
   screen->setRotation(3);
   pinMode(TFT_VCC, OUTPUT);
-  setBacklightLevel(120);
+  setBacklightLevel(100);
 }
 
 void Screen::setBacklightLevel(uint8_t backlight_level)

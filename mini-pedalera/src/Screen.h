@@ -19,7 +19,7 @@
 #include <font_LiberationSansBold.h>
 #include <font_LiberationSansNarrowBold.h>
 
-#define TFT_VCC 28
+#define TFT_VCC 25
 
 class Screen
 {
