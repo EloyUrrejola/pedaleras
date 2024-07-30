@@ -9,7 +9,7 @@
 class Button
 {
   public:
-    Button(uint8_t, uint8_t[2], uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+    Button(uint8_t, uint8_t[2], uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, int, uint8_t);
     void changeMomentary(bool state);
     uint8_t changed();
     uint8_t settingsChanged();

@@ -61,7 +61,7 @@ uint8_t Button::changed()
   }
   if (button_pressed) {
     button_time_now = millis();
-    if (button_time_now - button_time_start > button_hold_time) {
+    if (static_cast<int>(button_time_now - button_time_start) > button_hold_time) {
       button_pressed = false;
       return button_hold_action;
     }
