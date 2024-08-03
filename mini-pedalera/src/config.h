@@ -30,6 +30,7 @@ extern const uint8_t OCTAVE_LED_CC;
 extern const uint8_t GUITAR_LED_CC;
 extern const uint8_t REVERB_LED_CC;
 extern const uint8_t CHORUS_LED_CC;
+extern const uint8_t MIDI_LED_CC;
 extern const uint8_t PAGEDN_LED_CC;
 extern const uint8_t RESET_LED_CC;
 extern const uint8_t PLAY_1_LED_CC;

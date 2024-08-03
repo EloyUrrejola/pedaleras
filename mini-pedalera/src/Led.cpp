@@ -150,23 +150,23 @@ uint8_t Led::getLedCc()
 void Led::setStatusLeds()
 {
   const bool* params = Status::getAll();
-  if (params[7]) {
+  if (params[8]) {
     leds[0]->on();
   } else {
     leds[0]->off();
   }
   if (params[0]) {
-    if (params[8]) {
+    if (params[9]) {
       leds[1]->on();
     } else {
       leds[1]->off();
     }
-    if (params[9]) {
+    if (params[10]) {
       leds[2]->on();
     } else {
       leds[2]->off();
     }
-    if (params[10]) {
+    if (params[11]) {
       leds[3]->on();
     } else {
       leds[3]->off();
@@ -190,7 +190,7 @@ void Led::setStatusLeds()
   }
   leds[4]->off();
   leds[5]->off();
-  if (params[6]) {
+  if (params[7]) {
     leds[6]->on();
   } else {
     leds[6]->off();

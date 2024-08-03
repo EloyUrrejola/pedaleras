@@ -28,6 +28,7 @@ const uint8_t OCTAVE_LED_CC = 15;
 const uint8_t GUITAR_LED_CC = 20;
 const uint8_t REVERB_LED_CC = 21;
 const uint8_t CHORUS_LED_CC = 23;
+const uint8_t MIDI_LED_CC = 25;
 const uint8_t PAGEDN_LED_CC = 30;
 const uint8_t RESET_LED_CC = 31;
 const uint8_t PLAY_1_LED_CC = 85;

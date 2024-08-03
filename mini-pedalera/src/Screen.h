@@ -141,18 +141,18 @@ class Screen
     const ILI9341_t3_font_t clock_date_font = Arial_20;
     const int clock_date_color = ILI9488_YELLOW;
 
-    const ILI9341_t3_font_t status_bar_font = LiberationSansNarrow_18_Bold;
+    const ILI9341_t3_font_t status_bar_font = LiberationSansNarrow_16_Bold;
     const int status_bar_font_size = 1;
-    const uint16_t status_bar_y = 294;
-    const uint16_t status_bar_h = 25;
-    const uint16_t status_bar_text_y = 299;
+    const uint16_t status_bar_y = 296;
+    const uint16_t status_bar_h = 23;
+    const uint16_t status_bar_text_y = 300;
 
     const int effects_mode_color = ILI9488_BLACK;
     const int effects_mode_background_color = 0x0DE8;
     const int chords_mode_color = ILI9488_BLACK;
     const int chords_mode_background_color = ILI9488_RED;
     const uint16_t buttons_mode_x = 0;
-    const uint16_t buttons_mode_w = 98;
+    const uint16_t buttons_mode_w = 93;
 
     /*const int bass_on_background_color = ILI9488_CYAN;
     const int bass_off_background_color = ILI9488_BLACK;
@@ -165,29 +165,36 @@ class Screen
     const int octave_off_background_color = ILI9488_BLACK;
     const int octave_text_on_color = ILI9488_BLACK;
     const int octave_text_off_color = ILI9488_CYAN;
-    const uint16_t octave_x = 98;
-    const uint16_t octave_w = 98;
+    const uint16_t octave_x = 93;
+    const uint16_t octave_w = 85;
 
     const int guitar_on_background_color = ILI9488_YELLOW;
     const int guitar_off_background_color = ILI9488_BLACK;
     const int guitar_text_on_color = ILI9488_BLACK;
     const int guitar_text_off_color = ILI9488_YELLOW;
-    const uint16_t guitar_x = 196;
-    const uint16_t guitar_w = 88;
+    const uint16_t guitar_x = 178;
+    const uint16_t guitar_w = 79;
 
     const int reverb_on_background_color = ILI9488_CYAN;
     const int reverb_off_background_color = ILI9488_BLACK;
     const int reverb_text_on_color = ILI9488_BLACK;
     const int reverb_text_off_color = ILI9488_CYAN;
-    const uint16_t reverb_x = 284;
-    const uint16_t reverb_w = 100;
+    const uint16_t reverb_x = 257;
+    const uint16_t reverb_w = 86;
+
+    const int midi_on_background_color = 0xF9A0;
+    const int midi_off_background_color = ILI9488_BLACK;
+    const int midi_text_on_color = ILI9488_BLACK;
+    const int midi_text_off_color = 0xF9A0;
+    const uint16_t midi_x = 343;
+    const uint16_t midi_w = 48;
 
     const int chorus_on_background_color = ILI9488_GREEN;
     const int chorus_off_background_color = ILI9488_BLACK;
     const int chorus_text_on_color = ILI9488_BLACK;
     const int chorus_text_off_color = ILI9488_GREEN;
-    const uint16_t chorus_x = 384;
-    const uint16_t chorus_w = 95;
+    const uint16_t chorus_x = 391;
+    const uint16_t chorus_w = 89;
 
     ILI9488_t3 *screen;
     void     removeMessage();

@@ -11,7 +11,7 @@ void Screen::begin()
   screen->begin();
   screen->setRotation(3);
   pinMode(TFT_VCC, OUTPUT);
-  setBacklightLevel(100);
+  setBacklightLevel(160);
 }
 
 void Screen::setBacklightLevel(uint8_t backlight_level)
@@ -415,6 +415,18 @@ void Screen::writeStatusBarParameter(uint8_t param_index, bool state)
   }
   if (param_index == 5) {
     writeStatusParameter(
+      "MIDI",
+      state,
+      midi_text_off_color,
+      midi_off_background_color,
+      midi_text_on_color,
+      midi_on_background_color,
+      midi_x,
+      midi_w
+    );
+  }
+  if (param_index == 6) {
+    writeStatusParameter(
       "CHORUS",
       state,
       chorus_text_off_color,
@@ -477,8 +489,18 @@ void Screen::writeStatusBar()
     reverb_w
   );
   writeStatusParameter(
-    "CHORUS",
+    "MIDI",
     params[5] ? true : false,
+    midi_text_off_color,
+    midi_off_background_color,
+    midi_text_on_color,
+    midi_on_background_color,
+    midi_x,
+    midi_w
+  );
+  writeStatusParameter(
+    "CHORUS",
+    params[6] ? true : false,
     chorus_text_off_color,
     chorus_off_background_color,
     chorus_text_on_color,

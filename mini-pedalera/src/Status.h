@@ -15,6 +15,7 @@ class Status
     static bool octave;
     static bool guitar;
     static bool reverb;
+    static bool midi;
     static bool chorus;
     static bool player_1;
     static bool chord_A;
