@@ -6,6 +6,7 @@
 #include "Screen.h"
 #include "Button.h"
 #include "Led.h"
+#include "config.h"
 
 class Tuner
 {

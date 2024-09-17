@@ -21,7 +21,7 @@ void SysExMessage::process(uint8_t *data, unsigned int length)
     getSongListFromMessage(message);
   }
   if (type == TYPE_SONG) {
-    getSongAndPartFromMessage(message);
+    getSongAndPartsFromMessage(message);
   }
   if (type == TYPE_CHORD) {
     getChord(message);
@@ -89,27 +89,33 @@ void SysExMessage::getSongListFromMessage(std::string message)
 
   std::string list_name = song_list_string.substr(0, list_delimiter_pos);
   song_list_string.erase(0, list_delimiter_pos + 1);
-
   const uint8_t max_songs = SongList::getMaximumNumberOfSongs();
-  std::vector<std::string> song_list;
-  uint8_t song_count = 0;
-
-  std::istringstream song_stream(song_list_string);
-  std::string song;
-
-  while (std::getline(song_stream, song, SONG_DELIMITER) && song_count < max_songs) {
-    song_list.push_back(song);
-    song_count++;
-  }
+  std::vector<std::string> song_list = getItemsFromList(song_list_string, max_songs);
 
   SongList::addSongs(list_name, song_list);
 
-  if (song_count > 0) {
+  if (!empty(song_list)) {
     screen->writeTempMessage(list_name.c_str(), "LOADED");
   }
 }
 
-void SysExMessage::getSongAndPartFromMessage(std::string message)
+std::vector<std::string> SysExMessage::getItemsFromList(std::string list_string, const uint8_t max_items)
+{
+  uint8_t item_count = 0;
+
+  std::istringstream list_stream(list_string);
+  std::string item;
+  std::vector<std::string> item_list;
+
+  while (std::getline(list_stream, item, SONG_DELIMITER) && item_count < max_items) {
+    item_list.push_back(item);
+    item_count++;
+  }
+
+  return item_list;
+}
+
+void SysExMessage::getSongAndPartsFromMessage(std::string message)
 {
   if (SongList::getNumberOfSongs() == 0) {
     return;
@@ -118,10 +124,20 @@ void SysExMessage::getSongAndPartFromMessage(std::string message)
   uint8_t current_song_index = getSongIndexFromMessage(message);
   SongList::setCurrentSongIndex(current_song_index);
 
-  std::string current_part = getPartFromMessage(message);
+  uint8_t current_part_index = getSongPartIndexFromMessage(message);
+  SongList::setCurrentSongPartIndex(current_part_index);
 
-  SongList::setCurrentPart(current_part);
-  screen->writeSongAndPart();
+  size_t list_delimiter_pos = message.find(LIST_DELIMITER);
+  if (list_delimiter_pos != std::string::npos) {
+    std::string part_list_string = message.substr(list_delimiter_pos + 1);
+
+    const uint8_t max_parts = SongList::getMaximumNumberOfParts();
+    std::vector<std::string> part_list = getItemsFromList(part_list_string, max_parts);
+
+    SongList::addParts(part_list);
+  }
+    
+  screen->writeSongAndParts();
   Led::setStatusLeds();
 }
 
@@ -138,6 +154,18 @@ uint8_t SysExMessage::getSongIndexFromMessage(std::string message)
       std::string song_number = message.substr(delimiter1 + 1);
       return std::stoi(song_number);
     }
+  }
+  return -1;
+}
+
+uint8_t SysExMessage::getSongPartIndexFromMessage(std::string message)
+{
+  size_t delimiter1 = message.find('-');
+  size_t delimiter2 = message.find('%');
+
+  if (delimiter1 != std::string::npos && delimiter2 != std::string::npos && delimiter2 > delimiter1) {
+    std::string part_number = message.substr(delimiter1 + 1, delimiter2 - delimiter1 - 1);
+    return std::stoi(part_number);
   }
   return -1;
 }

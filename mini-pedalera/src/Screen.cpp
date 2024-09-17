@@ -56,6 +56,82 @@ void Screen::writeMessage(const std::string line1, const std::string line2)
   screen->print(line2.c_str());
 }
 
+void Screen::writeSongAndParts()
+{
+  if (SongList::getNumberOfSongs() == 0) {
+    writeMessage("No", "setlist");
+    return;
+  }
+  screen->fillRect(0, 0, 480, 36, SCREEN_BG_COLOR);
+  screen->fillRect(0, 36, 280, song_part_height, SCREEN_BG_COLOR);
+
+  screen->setFont(song_name_font);
+  screen->setTextSize(song_name_size);
+  screen->setTextWrap(false);
+
+  const std::string song = SongList::getCurrentSong();
+  std::vector<std::string> part_list = SongList::getPartList();
+  //int16_t song_name_x = getCenteredXFromText(song);
+
+  screen->setTextColor(song_name_color);
+  screen->setCursor(song_name_x, song_name_y);
+  screen->print(song.c_str());
+
+  writeParts(part_list, SongList::getCurrentSongPartIndex());
+
+  time_t current_time = now();
+  showClock(hour(current_time), minute(current_time), second(current_time), day(current_time), month(current_time), year(current_time));
+}
+
+void Screen::writeParts(std::vector<std::string> part_list, uint8_t current_part)
+{
+  screen->setFont(song_part_font);
+  screen->setTextSize(song_part_size);
+
+  uint8_t number_of_visible_parts = 7;
+  uint8_t fixed_index = 3;
+
+  uint8_t number_of_parts = part_list.size();
+  uint8_t first_part_index = 0;
+  uint8_t last_part_index = 0;
+
+  if (number_of_parts <= number_of_visible_parts) {
+    first_part_index = 0;
+    last_part_index = number_of_parts - 1;
+  } else {
+    if (current_part <= fixed_index) {
+      first_part_index = 0;
+      last_part_index = number_of_visible_parts - 1;
+    } else {
+      if (current_part <= number_of_parts - (number_of_visible_parts - fixed_index)) {
+        first_part_index = current_part - fixed_index;
+        last_part_index = first_part_index + number_of_visible_parts - 1;
+      } else {
+        first_part_index = number_of_parts - number_of_visible_parts;
+        last_part_index = number_of_parts - 1;
+      }
+    }
+  }
+
+  writePartView(part_list, first_part_index, last_part_index, current_part);
+}
+
+void Screen::writePartView(std::vector<std::string> part_list, uint8_t first_index, uint8_t last_index, uint8_t current_part)
+{
+  for (uint8_t i = first_index; i <= last_index; i ++) {
+    screen->setTextColor(song_part_number_color);
+    screen->setCursor(0, song_part_name_height * (i - first_index + 1) + song_part_y);
+    screen->print(i + 1);
+    screen->print(". ");
+    if (i == current_part) {
+      screen->setTextColor(song_part_color_selected);
+    } else {
+      screen->setTextColor(song_part_color);
+    }
+    screen->print(part_list[i].c_str());
+  }
+}
+
 void Screen::writeSongAndPart()
 {
   if (SongList::getNumberOfSongs() == 0) {
@@ -66,7 +142,7 @@ void Screen::writeSongAndPart()
   const std::string song = SongList::getCurrentSong();
   const std::string part = SongList::getCurrentPart();
 
-  screen->fillRect(0, 0, 480, song_and_part_height, SCREEN_BG_COLOR);
+  screen->fillRect(0, 0, 480, 279, SCREEN_BG_COLOR);
   screen->setFont(song_name_font);
   screen->setTextSize(song_name_size);
   screen->setTextWrap(false);
@@ -91,17 +167,14 @@ void Screen::writeChord(std::string chord)
 {
   screen->setFont(chord_font);
   screen->setTextSize(chord_size);
-
-  int16_t centered_x = getCenteredXFromText(chord);
-
   screen->setTextColor(chord_color);
-  screen->setCursor(centered_x, chord_y);
+  screen->setCursor(chord_x, chord_y);
   screen->print(chord.c_str());
 }
 
 void Screen::removeChord()
 {
-  screen->fillRect(0, chord_y - 2, 480, chord_h, SCREEN_BG_COLOR);
+  screen->fillRect(chord_x, chord_y - 2, chord_w, chord_h, SCREEN_BG_COLOR);
 }
 
 void Screen::writeSettingsTitle(char *title)
@@ -336,11 +409,13 @@ void Screen::showClockBackground()
 
 void Screen::showClock(int hours, int minutes, int seconds, int day, int month, int year)
 {
-  clean();
+  //clean();
+  screen->fillRect(clock_x, clock_y, clock_w, clock_h, clock_background_color);
+
   screen->setFont(clock_hour_font);
   screen->setTextSize(clock_font_size);
   screen->setTextColor(clock_hour_color);
-  screen->setCursor(20, 65);
+  screen->setCursor(clock_x, clock_y);
   char hour_txt[6];
   hour_txt[0] = '0' + ((hours / 10) % 10);
   hour_txt[1] = '0' + (hours % 10);
@@ -350,7 +425,7 @@ void Screen::showClock(int hours, int minutes, int seconds, int day, int month, 
   hour_txt[5] = 0;
   screen->print(hour_txt);
 
-  screen->setFont(clock_date_font);
+  /*screen->setFont(clock_date_font);
   screen->setTextSize(clock_font_size);
   screen->setTextColor(clock_date_color);
   screen->setCursor(18, 90);
@@ -366,7 +441,7 @@ void Screen::showClock(int hours, int minutes, int seconds, int day, int month, 
   date_txt[8] = '0' + ((year / 10) % 10);
   date_txt[9] = '0' + (year % 10);
   date_txt[10] = 0;
-  screen->print(date_txt);
+  screen->print(date_txt);*/
 }
 
 void Screen::writeStatusBarParameter(uint8_t param_index, bool state)

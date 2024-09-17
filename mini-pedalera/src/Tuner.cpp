@@ -15,6 +15,8 @@ void Tuner::startTunerMode()
 {
   screen->clean();
   //screen->writeTunerTitle();
+
+  usbMIDI.sendControlChange(TUNER_BUTTON_CC, 127, 1);
   screen->showTuningBackground();
 }
 

@@ -95,7 +95,6 @@ void loop()
         tunerMode();
       }
       if (action == CLOCK_ACTION) {
-        showClock(2);
         exitClockMode();
       }
       if (action == NEXT_SONG_ACTION) {
@@ -156,7 +155,7 @@ void settingsMode()
 void exitSettingsMode()
 {
   screen.clean();
-  screen.writeSongAndPart();
+  screen.writeSongAndParts();
   screen.writeStatusBar();
   Led::setStatusLeds();
 }
@@ -176,7 +175,7 @@ void songSelectorMode()
 void exitSongSelectorMode()
 {
   screen.clean();
-  screen.writeSongAndPart();
+  screen.writeSongAndParts();
   screen.writeStatusBar();
   Led::setStatusLeds();
 }
@@ -192,7 +191,7 @@ void tunerMode()
 void exitTunerMode()
 {
   screen.clean();
-  screen.writeSongAndPart();
+  screen.writeSongAndParts();
 }
 
 void showClock(uint8_t wait_seconds)
@@ -204,7 +203,7 @@ void showClock(uint8_t wait_seconds)
 void exitClockMode()
 {
   screen.clean();
-  screen.writeSongAndPart();
+  screen.writeSongAndParts();
 }
 
 #endif

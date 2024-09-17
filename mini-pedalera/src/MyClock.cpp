@@ -11,8 +11,8 @@ void MyClock::init(Screen *screen)
 
 void MyClock::startClockMode()
 {
-  screen->clean();
-  screen->showClockBackground();
+  //screen->clean();
+  //screen->showClockBackground();
 }
 
 void MyClock::setDatetime(int datetime)

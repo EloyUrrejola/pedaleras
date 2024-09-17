@@ -30,8 +30,10 @@ class SysExMessage
     void replaceTildeVowels(std::string& message);
     std::string getMessageType(std::string message);
     void getSongListFromMessage(std::string message);
-    void getSongAndPartFromMessage(std::string message);
+    void getSongAndPartsFromMessage(std::string message);
     uint8_t getSongIndexFromMessage(std::string message);
+    uint8_t getSongPartIndexFromMessage(std::string message);
+    std::vector<std::string> getItemsFromList(std::string list_string, const uint8_t max_items);
     std::string getPartFromMessage(std::string message);
     void getChord(std::string message);
     std::string getChordFromMessage(std::string message);

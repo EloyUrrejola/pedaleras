@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include <string>
 #include <vector>
+#include <TimeLib.h>
+#include <Timezone.h>
+#include <ctime>
 
 #include <ILI9488_t3.h>
 #include <SPI.h>
@@ -31,6 +34,7 @@ class Screen
     void writeTempMessage(const std::string line1, const std::string line2);
     void writeMessage(const std::string line1, const std::string line2);
     void writeSongAndPart();
+    void writeSongAndParts();
     void writeChord(std::string chord);
     void removeChord();
     void writeSettingsTitle(char *title);
@@ -52,6 +56,8 @@ class Screen
     void removeLastSongs();
     void removeSongs(const std::vector<std::string> songs, uint8_t first_song, int ypos);
     void writeSongs(const std::vector<std::string> songs, uint8_t first_song, uint8_t number_of_songs, uint8_t selected_index, int ypos);
+    void writeParts(std::vector<std::string> part_list, uint8_t current_part);
+    void writePartView(std::vector<std::string> part_list, uint8_t first_part_index, uint8_t last_part_index, uint8_t current_part_index);
     float getY(int8_t start, int8_t end, uint8_t step, float total_steps);
     void writeButtonsMode(uint8_t mode);
     void writeButtonsModeBackground(uint8_t mode);
@@ -91,22 +97,25 @@ class Screen
 
     const ILI9341_t3_font_t song_name_font = Michroma_20;
     const int  song_name_color = ILI9488_WHITE;
-    const uint16_t song_name_x     = 0;
-    const uint16_t song_name_y     = 39;
+    const uint16_t song_name_x     = 30;
+    const uint16_t song_name_y     = 9;
     const uint8_t song_name_size  = 1;
 
     const ILI9341_t3_font_t song_part_font = Arial_20;
+    const int song_part_number_color = ILI9488_WHITE;
     const int song_part_color  = ILI9488_CYAN;
+    const int song_part_color_selected = ILI9488_YELLOW;
+    const int song_part_name_height = 34;
     const uint16_t song_part_x     = 0;
-    const uint16_t song_part_y     = 79;
+    const uint16_t song_part_y     = 17;
+    const uint16_t song_part_height = 260;
     const uint8_t song_part_size  = 1;
-
-    const uint16_t song_and_part_height = 110;
 
     const ILI9341_t3_font_t chord_font = LiberationSans_32_Bold;
     const int  chord_color = 0x8FCF;
-    const uint16_t chord_x     = 0;
-    const uint16_t chord_y     = 149;
+    const uint16_t chord_x     = 280;
+    const uint16_t chord_y     = 120;
+    const uint16_t chord_w     = 200;
     const uint16_t chord_h     = 46;
     const uint8_t chord_size  = 1;
 
@@ -135,11 +144,16 @@ class Screen
     const uint16_t tuner_sides_width = 67;
     const uint16_t tuner_bar_width = 87;
 
-    const ILI9341_t3_font_t clock_hour_font = Arial_20;
+    const ILI9341_t3_font_t clock_hour_font = Arial_24;
     const int clock_font_size = 1;
-    const int clock_hour_color = ILI9488_CYAN;
+    const int clock_hour_color = 0xAD55;
+    const int clock_background_color = ILI9488_BLACK;
     const ILI9341_t3_font_t clock_date_font = Arial_20;
     const int clock_date_color = ILI9488_YELLOW;
+    const uint16_t clock_x = 394;
+    const uint16_t clock_y = 4;
+    const uint16_t clock_w = 86;
+    const uint16_t clock_h = 28;
 
     const ILI9341_t3_font_t status_bar_font = LiberationSansNarrow_16_Bold;
     const int status_bar_font_size = 1;
