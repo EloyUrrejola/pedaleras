@@ -111,12 +111,16 @@ class Screen
     const uint16_t song_part_height = 260;
     const uint8_t song_part_size  = 1;
 
-    const ILI9341_t3_font_t chord_font = LiberationSans_32_Bold;
-    const int  chord_color = 0x8FCF;
-    const uint16_t chord_x     = 280;
-    const uint16_t chord_y     = 120;
-    const uint16_t chord_w     = 200;
-    const uint16_t chord_h     = 46;
+    const ILI9341_t3_font_t chord_font = LiberationSansNarrow_40_Bold;
+    const int chord_bg_color = ILI9488_GREEN;
+    //const int  chord_color = 0x8FCF;
+    const int chord_color     = ILI9488_BLACK;
+    const uint16_t chord_x     = 120;
+    const uint16_t chord_y     = 12;
+    const uint16_t chord_bg_x     = 239;
+    const uint16_t chord_bg_y     = 99;
+    const uint16_t chord_bg_w     = 260;
+    const uint16_t chord_bg_h     = 66;
     const uint8_t chord_size  = 1;
 
     const ILI9341_t3_font_t settings_font = Arial_20;

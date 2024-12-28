@@ -63,7 +63,7 @@ void Screen::writeSongAndParts()
     return;
   }
   screen->fillRect(0, 0, 480, 36, SCREEN_BG_COLOR);
-  screen->fillRect(0, 36, 280, song_part_height, SCREEN_BG_COLOR);
+  screen->fillRect(0, 36, 240, song_part_height, SCREEN_BG_COLOR);
 
   screen->setFont(song_name_font);
   screen->setTextSize(song_name_size);
@@ -165,16 +165,17 @@ void Screen::writeSongAndPart()
 
 void Screen::writeChord(std::string chord)
 {
+  screen->fillRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, chord_bg_color);
   screen->setFont(chord_font);
   screen->setTextSize(chord_size);
   screen->setTextColor(chord_color);
-  screen->setCursor(chord_x, chord_y);
+  screen->setCursor(chord_x + getCenteredXFromText(chord.c_str()), chord_bg_y + chord_y);
   screen->print(chord.c_str());
 }
 
 void Screen::removeChord()
 {
-  screen->fillRect(chord_x, chord_y - 2, chord_w, chord_h, SCREEN_BG_COLOR);
+  screen->fillRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, SCREEN_BG_COLOR);
 }
 
 void Screen::writeSettingsTitle(char *title)
