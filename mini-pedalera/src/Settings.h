@@ -21,8 +21,8 @@ class Settings
     Button **buttons;
     uint8_t number_of_buttons;
 
-    const uint8_t _number_of_setting_buttons = 4;
-    const uint8_t _buttons_index[4] = {3,4,7,8};
+    const uint8_t _number_of_setting_buttons = 5;
+    const uint8_t _buttons_index[5] = {3,4,5,7,8};
 
     const int LED_FLASHING_ON  = 500;
     const int LED_FLASHING_OFF = 500;
@@ -33,6 +33,7 @@ class Settings
     const uint8_t _up = 2;
     const uint8_t _dn = 3;
     const uint8_t _select = 6;
+    const uint8_t _out = 8;
 
     char settings_title[9] = "SETTINGS";
     const uint8_t led_intensity_menu_option = 0;

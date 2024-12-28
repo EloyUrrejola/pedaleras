@@ -32,7 +32,7 @@ void Tuner::tunerMode()
     for (uint8_t i = 0; i < number_of_buttons; i++) {
       uint8_t action = buttons[i]->settingsChanged();
       if (action == _exit) {
-        buttons[i]->sendControlChange(buttons[i]->getButtonCc());
+        usbMIDI.sendControlChange(TUNER_BUTTON_CC, 0, 1);
         tuner_mode = false;
       }
     }

@@ -86,7 +86,12 @@ void Settings::settingsMode()
           showMenuOptions(menu_options, number_of_options, selected_option, option_values, max_values);
         }
       }
-      exitOption(action, menu_options, number_of_options, selected_option, level, settings_mode, option_values, min_values, max_values, option_ccs);
+      if (action == _exit and level > 1) {
+        exitOption(action, menu_options, number_of_options, selected_option, level, settings_mode, option_values, min_values, max_values, option_ccs);
+      }
+      if (action == _out) {
+        settings_mode = false;
+      }
     }
   }
 }
@@ -184,23 +189,17 @@ uint8_t Settings::getGpOptionValue(uint8_t value, uint8_t max_value)
 
 void Settings::exitOption(uint8_t action, char **&menu_options, uint8_t &number_of_options, uint8_t &selected_option, uint8_t &level, bool &settings_mode, uint8_t *&option_values, uint8_t *&min_values, uint8_t *&max_values, uint8_t *&option_ccs)
 {
-  if (action == _exit) {
-    if (level > 1) {
-      menu_options = (char**)MENU;
-      number_of_options = NUMBER_OF_MENU_OPTIONS;
-      option_values = _menu_option_values;
-      min_values = (uint8_t*)_menu_min_options;
-      max_values = (uint8_t*)_menu_max_options;
-      option_ccs = (uint8_t*)_menu_option_ccs;
-      selected_option = 0;
-      level--;
-      screen->clean();
-      screen->writeSettingsTitle(settings_title);
-      showMenuOptions(menu_options, number_of_options, selected_option, option_values, max_values);
-    } else {
-      settings_mode = false;
-    }
-  }
+  menu_options = (char**)MENU;
+  number_of_options = NUMBER_OF_MENU_OPTIONS;
+  option_values = _menu_option_values;
+  min_values = (uint8_t*)_menu_min_options;
+  max_values = (uint8_t*)_menu_max_options;
+  option_ccs = (uint8_t*)_menu_option_ccs;
+  selected_option = 0;
+  level--;
+  screen->clean();
+  screen->writeSettingsTitle(settings_title);
+  showMenuOptions(menu_options, number_of_options, selected_option, option_values, max_values);
 }
 
 bool Settings::isValueChange(uint8_t action, uint8_t selected_option, uint8_t option_value, uint8_t min_value, uint8_t max_value)

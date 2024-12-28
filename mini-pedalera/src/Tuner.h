@@ -29,7 +29,7 @@ class Tuner
     const uint8_t _leds_flashing_index[1] = {7};
     const uint8_t _number_of_leds_tunning = 8;
     const uint8_t _leds_tuning_index[8] = {0,1,2,3,8,9,10,11};
-    const uint8_t _exit = 1;
+    const uint8_t _exit = 8;
 
     void showTuning(uint8_t tuning, uint8_t last_tuning);
     void showLedTuning(uint8_t tuning);

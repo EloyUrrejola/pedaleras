@@ -28,8 +28,8 @@ class SongSelector
     const int LED_FLASHING_ON  = 500;
     const int LED_FLASHING_OFF = 500;
     const uint8_t number_of_leds_flashing = 4;
-    const uint8_t leds_index[4] = {3, 4, 7, 8};
-    const uint8_t _cancel = 1;
+    const uint8_t leds_index[4] = {3, 4, 5, 8};
+    const uint8_t _cancel = 8;
     const uint8_t _pg_up = 2;
     const uint8_t _pd_dn = 3;
     const uint8_t _select = 6;

@@ -54,17 +54,17 @@ const uint8_t STOP_ACTION = 7;
 const uint8_t BUTTON_PIN_CCS[2][9] = {
   {
     A_CHORD_BUTTON_CC, OCTAVE_BUTTON_CC, GUITAR_BUTTON_CC, REVERB_BUTTON_CC, PAGEDN_BUTTON_CC,
-    RESET_BUTTON_CC, PLAY_1_BUTTON_CC, BASS_BUTTON_CC, 0
+    RESET_BUTTON_CC, PLAY_1_BUTTON_CC, 0, 0
   },
   {
     A_CHORD_BUTTON_CC, B_CHORD_BUTTON_CC, C_CHORD_BUTTON_CC, D_CHORD_BUTTON_CC, PAGEDN_BUTTON_CC,
-    RESET_BUTTON_CC, PLAY_1_BUTTON_CC, BASS_BUTTON_CC, 0
+    RESET_BUTTON_CC, PLAY_1_BUTTON_CC, 0, 0
   }
 };
 
 const uint8_t button_pins[]            = {38,34,35,39,40,23,22,20,19};
 // CCs al soltar el botón
-const uint8_t button_release_ccs[]     = { 0, 0, 0, 0, 0, 0, 0, 0, PAGEUP_BUTTON_CC};
+const uint8_t button_release_ccs[]     = { 0, 0, 0, 0, 0, 0, 0, BASS_BUTTON_CC, PAGEUP_BUTTON_CC};
 // CCs recibidos para activar momentary_ccs, por ej. guitar MOD (89)
 const uint8_t button_momentary_set[]   = { 0, 0, 0, GUITAR_SWICH_CC, 0, 0, 0, 0, 0};
 // Acción activada con button_momentary_set, por ej. guitar/bass (20)
