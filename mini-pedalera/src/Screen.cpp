@@ -178,10 +178,8 @@ void Screen::removeChord()
   screen->fillRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, SCREEN_BG_COLOR);
 }
 
-void Screen::writeSettingsTitle(char *title)
+void Screen::writeSectionTitle(char *title)
 {
-  screen->fillRect(0, 0, 128, 50, SCREEN_BG_COLOR);
-
   screen->setFont(settings_font);
   screen->setTextSize(settings_size);
 
@@ -376,31 +374,47 @@ void Screen::writeSongs(const std::vector<std::string> songs, uint8_t first_song
 
 void Screen::showTuningBackground()
 {
-  screen->fillRect(50, 0, tuner_sides_width, 128, tuner_color_sides);
-  screen->fillRect(50, 60, tuner_sides_width, 8, tuner_color_center);
+  screen->fillRect(239 - tuner_needle_width / 2, 48, tuner_needle_width, 216, tuner_color_center);
 }
 
 void Screen::showNote(char *note)
 {
-  screen->fillRect(0, 28, 28, 18, ILI9488_BLACK);
+  screen->fillRect(0, 275, 479, 44, ILI9488_BLACK);
 
   screen->setFont(tuner_chord_font);
   screen->setTextSize(tuner_chord_font_size);
-  screen->setTextColor(chord_color);
-  screen->setCursor(0, 46);
+  screen->setTextColor(tuner_color_notes);
+  screen->setCursor(getCenteredXFromText(note), 277);
   screen->print(note);
 }
 
 void Screen::showTuning(uint8_t tuning, uint8_t last_tuning)
 {
-  if (last_tuning < 60 || last_tuning > 67) {
-    screen->fillRect(40, 127 - last_tuning - 1, tuner_bar_width, 2, ILI9488_BLACK);
-    screen->fillRect(50, 127 - last_tuning - 1, tuner_sides_width, 2, tuner_color_sides);
-  } else {
-    screen->fillRect(40, 127 - last_tuning - 1, tuner_bar_width, 2, ILI9488_BLACK);
+  int bg_color = ILI9488_BLACK;
+  int tuner_color = tuner_color_tuning;
+  if (last_tuning == 63) {
+    bg_color = tuner_color_center;
+  }
+  if (tuning == 63) {
+    tuner_color = tuner_color_perfect;
+  }
+  int16_t last_x = (last_tuning * tuner_needle_width) - 1031;
+  int16_t x = (tuning * tuner_needle_width) - 1031;
+  if (last_x < 0) {
+    last_x = 0;
+  }
+  if (last_x > 479 - tuner_needle_width) {
+    last_x = 479 - tuner_needle_width;
+  }
+  if (x < 0) {
+    x = 0;
+  }
+  if (x > 479 - tuner_needle_width) {
+    x = 479 - tuner_needle_width;
   }
 
-  screen->fillRect(40, 127 - tuning - 1, tuner_bar_width, 2, tuner_color_tuning);
+  screen->fillRect(last_x, 48, tuner_needle_width, 216, bg_color);
+  screen->fillRect(x, 48, tuner_needle_width, 216, tuner_color);
 }
 
 void Screen::showClockBackground()

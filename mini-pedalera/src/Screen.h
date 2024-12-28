@@ -37,7 +37,7 @@ class Screen
     void writeSongAndParts();
     void writeChord(std::string chord);
     void removeChord();
-    void writeSettingsTitle(char *title);
+    void writeSectionTitle(char *title);
     void showSettingOptions(char **menu, uint8_t number_of_options, uint8_t selected_option, uint8_t *option_values, bool *options_with_values);
     void showSettingOptionEdition(char **menu, uint8_t number_of_options, uint8_t selected_menu, uint8_t option_value);
     void writeSongList(uint8_t first_song, uint8_t song_index, int direction, bool slide, bool move);
@@ -140,13 +140,13 @@ class Screen
     const uint16_t settings_song_name_height = 28;
     const uint8_t settings_song_name_size  = 1;
 
-    const ILI9341_t3_font_t tuner_chord_font = Arial_20;
+    const ILI9341_t3_font_t tuner_chord_font = LiberationSansNarrow_40_Bold;
     const int tuner_chord_font_size = 1;
-    const int tuner_color_sides = ILI9488_BLUE;
+    const int tuner_color_notes = ILI9488_GREEN;
     const int tuner_color_tuning = ILI9488_WHITE;
-    const int tuner_color_center = ILI9488_BLACK;
-    const uint16_t tuner_sides_width = 67;
-    const uint16_t tuner_bar_width = 87;
+    const int tuner_color_center = ILI9488_BLUE;
+    const int tuner_color_perfect = ILI9488_GREEN;
+    const uint16_t tuner_needle_width = 20;
 
     const ILI9341_t3_font_t clock_hour_font = Arial_24;
     const int clock_font_size = 1;

@@ -14,7 +14,7 @@ void Tuner::init(Screen *screen, Button **buttons, uint8_t number_of_buttons)
 void Tuner::startTunerMode()
 {
   screen->clean();
-  //screen->writeTunerTitle();
+  screen->writeSectionTitle(tuner_title);
 
   usbMIDI.sendControlChange(TUNER_BUTTON_CC, 127, 1);
   screen->showTuningBackground();

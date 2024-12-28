@@ -46,7 +46,7 @@ void Settings::setSettingValue(uint8_t cc, uint8_t value)
 void Settings::startSettingsMode()
 {
   screen->clean();
-  screen->writeSettingsTitle(settings_title);
+  screen->writeSectionTitle(settings_title);
   Led::startFlashingLeds(_leds_index, _number_of_leds_flashing);
 }
 
@@ -120,7 +120,7 @@ bool Settings::isMenuOptionChange(uint8_t action, uint8_t number_of_options, uin
 void Settings::selectSubmenu(char **&menu_options, uint8_t &number_of_options, uint8_t &selected_option, uint8_t *&option_values, uint8_t *&min_values, uint8_t *&max_values, uint8_t *&option_ccs)
 {
   screen->clean();
-  screen->writeSettingsTitle(menu_options[selected_option]);
+  screen->writeSectionTitle(menu_options[selected_option]);
   menu_options = (char**)SUBMENUS[selected_option];
   option_values = _submenu_option_values[selected_option];
   min_values = (uint8_t*)_submenu_min_options[selected_option];
@@ -198,7 +198,7 @@ void Settings::exitOption(uint8_t action, char **&menu_options, uint8_t &number_
   selected_option = 0;
   level--;
   screen->clean();
-  screen->writeSettingsTitle(settings_title);
+  screen->writeSectionTitle(settings_title);
   showMenuOptions(menu_options, number_of_options, selected_option, option_values, max_values);
 }
 
