@@ -26,8 +26,8 @@ class Tuner
     const char *NOTES[12] = {"C","Db","D","Eb","E","F","F#","G","Ab","A","Bb","B"};
     const int LED_FLASHING_ON  = 500;
     const int LED_FLASHING_OFF = 500;
-    const uint8_t _number_of_leds_flashing = 2;
-    const uint8_t _leds_flashing_index[2] = {5, 7};
+    const uint8_t _number_of_leds_flashing = 1;
+    const uint8_t _leds_flashing_index[1] = {5};
     const uint8_t _number_of_leds_tunning = 8;
     const uint8_t _leds_tuning_index[8] = {0,1,2,3,8,9,10,11};
     const uint8_t _exit = 8;

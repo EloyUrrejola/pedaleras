@@ -26,7 +26,8 @@ void Tuner::tunerMode()
   uint8_t cc;
   uint8_t value;
   char note[3];
-  uint8_t last_tuning = 0;
+  int8_t last_tuning = 0;
+  int8_t tuning;
   while (tuner_mode) {
     Led::updateFlashingLeds(_leds_flashing_index, _number_of_leds_flashing);
     for (uint8_t i = 0; i < number_of_buttons; i++) {
@@ -45,8 +46,9 @@ void Tuner::tunerMode()
         screen->showNote(note);
       }
       if (cc == 21) {
-        showTuning(value, last_tuning);
-        last_tuning = value;
+        tuning = value - 63;
+        showTuning(tuning, last_tuning);
+        last_tuning = tuning;
       }
     }
   }

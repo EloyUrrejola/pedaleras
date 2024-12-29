@@ -388,33 +388,37 @@ void Screen::showNote(char *note)
   screen->print(note);
 }
 
-void Screen::showTuning(uint8_t tuning, uint8_t last_tuning)
+void Screen::showTuning(int8_t tuning, int8_t last_tuning)
 {
+  int16_t last_x = calculateNeedlePosition(last_tuning);
+  int16_t x = calculateNeedlePosition(tuning);
+
   int bg_color = ILI9488_BLACK;
   int tuner_color = tuner_color_tuning;
-  if (last_tuning == 63) {
+  if (last_tuning == 0) {
     bg_color = tuner_color_center;
   }
-  if (tuning == 63) {
+  if (tuning == 0) {
     tuner_color = tuner_color_perfect;
-  }
-  int16_t last_x = (last_tuning * tuner_needle_width) - 1031;
-  int16_t x = (tuning * tuner_needle_width) - 1031;
-  if (last_x < 0) {
-    last_x = 0;
-  }
-  if (last_x > 479 - tuner_needle_width) {
-    last_x = 479 - tuner_needle_width;
-  }
-  if (x < 0) {
-    x = 0;
-  }
-  if (x > 479 - tuner_needle_width) {
-    x = 479 - tuner_needle_width;
+  } else if (x == 0 or x == ILI9488_TFTHEIGHT - tuner_needle_width) {
+    tuner_color = tuner_color_out;
   }
 
   screen->fillRect(last_x, 48, tuner_needle_width, 216, bg_color);
   screen->fillRect(x, 48, tuner_needle_width, 216, tuner_color);
+}
+
+uint16_t Screen::calculateNeedlePosition(int8_t tuning)
+{
+  int16_t x = (ILI9488_TFTHEIGHT / 2 - tuner_needle_width / 2) + (tuning * tuner_needle_width);
+
+  if (x < 0) {
+    x = 0;
+  } else if (x > (ILI9488_TFTHEIGHT - tuner_needle_width)) {
+    x = ILI9488_TFTHEIGHT - tuner_needle_width;
+  }
+  
+  return x;
 }
 
 void Screen::showClockBackground()

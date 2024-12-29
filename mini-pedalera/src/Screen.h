@@ -43,7 +43,7 @@ class Screen
     void writeSongList(uint8_t first_song, uint8_t song_index, int direction, bool slide, bool move);
     //void writeSongList(std::vector<std::string> songs, uint8_t selected_song_index, uint8_t number_of_songs, int direction, bool slide, bool move);
     void showNote(char *note);
-    void showTuning(uint8_t tuning, uint8_t last_tuning);
+    void showTuning(int8_t tuning, int8_t last_tuning);
     void showTuningBackground();
     void showClockBackground();
     void showClock(int hours, int minutes, int seconds, int day, int month, int year);
@@ -73,6 +73,7 @@ class Screen
       uint16_t x,
       uint16_t w
     );
+    uint16_t calculateNeedlePosition(int8_t tuning);
     
     const int INIT = 0;
     const int UP = -1;
@@ -144,9 +145,10 @@ class Screen
     const int tuner_chord_font_size = 1;
     const int tuner_color_notes = ILI9488_GREEN;
     const int tuner_color_tuning = ILI9488_WHITE;
-    const int tuner_color_center = ILI9488_BLUE;
+    const int tuner_color_center = ILI9488_DARKGREY;
     const int tuner_color_perfect = ILI9488_GREEN;
-    const uint16_t tuner_needle_width = 20;
+    const int tuner_color_out = ILI9488_RED;
+    const uint16_t tuner_needle_width = 14;
 
     const ILI9341_t3_font_t clock_hour_font = Arial_24;
     const int clock_font_size = 1;
