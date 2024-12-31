@@ -14,8 +14,6 @@ class MyClock
     MyClock();
     void init(Screen *screen);
     static void setDatetime(int datetime);
-    void startClockMode();
-    void clockMode(uint8_t wait_seconds);
   private:
     Screen *screen;
 
@@ -24,7 +22,6 @@ class MyClock
     int minutes = -1;
 
     static void setSpainDatetime(time_t current_time);
-    void showClock();
 };
 
 #endif

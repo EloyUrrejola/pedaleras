@@ -46,7 +46,6 @@ const uint8_t MODE_CHANNEL = 5;
 const uint8_t SETTINGS_ACTION = 1;
 const uint8_t SONG_SELECTOR_ACTION = 2;
 const uint8_t TUNER_ACTION = 3;
-const uint8_t CLOCK_ACTION = 4;
 const uint8_t NEXT_SONG_ACTION = 5;
 const uint8_t MODE_ACTION = 6;
 const uint8_t STOP_ACTION = 7;

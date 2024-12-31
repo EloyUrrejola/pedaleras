@@ -9,12 +9,6 @@ void MyClock::init(Screen *screen)
   this->screen = screen;
 }
 
-void MyClock::startClockMode()
-{
-  //screen->clean();
-  //screen->showClockBackground();
-}
-
 void MyClock::setDatetime(int datetime)
 {
   time_t current_time = static_cast<time_t>(datetime);
@@ -29,22 +23,4 @@ void MyClock::setSpainDatetime(time_t current_time)
 
   time_t local_time = europeMadrid.toLocal(current_time);
   setTime(local_time);
-}
-
-void MyClock::clockMode(uint8_t wait_seconds)
-{
-  bool clock_mode = true;
-  unsigned long start_time = millis();
-  showClock();
-  while (clock_mode) {
-    if (millis() - start_time >= wait_seconds * RELEASE_TIME) {
-      clock_mode = false;
-    }
-  }
-}
-
-void MyClock::showClock()
-{
-  time_t current_time = now();
-  screen->showClock(hour(current_time), minute(current_time), second(current_time), day(current_time), month(current_time), year(current_time));
 }

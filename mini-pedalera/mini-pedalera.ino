@@ -94,9 +94,6 @@ void loop()
       if (action == TUNER_ACTION) {
         tunerMode();
       }
-      if (action == CLOCK_ACTION) {
-        exitClockMode();
-      }
       if (action == NEXT_SONG_ACTION) {
         nextSong();
       }
@@ -189,18 +186,6 @@ void tunerMode()
 }
 
 void exitTunerMode()
-{
-  screen.clean();
-  screen.writeSongAndParts();
-}
-
-void showClock(uint8_t wait_seconds)
-{
-  my_clock.startClockMode();
-  my_clock.clockMode(wait_seconds);
-}
-
-void exitClockMode()
 {
   screen.clean();
   screen.writeSongAndParts();
