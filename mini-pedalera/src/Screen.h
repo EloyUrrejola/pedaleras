@@ -1,6 +1,8 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#define DARK_GREY 0x630B
+
 #include <Arduino.h>
 #include <string>
 #include <vector>
@@ -181,39 +183,59 @@ class Screen
     const uint16_t bass_x = 82;
     const uint16_t bass_w = 60;*/
 
+    /*const int octave_on_background_color = ILI9488_CYAN;
+    const int octave_off_background_color = ILI9488_BLACK;
+    const int octave_text_on_color = ILI9488_BLACK;
+    const int octave_text_off_color = ILI9488_CYAN;*/
     const int octave_on_background_color = ILI9488_CYAN;
     const int octave_off_background_color = ILI9488_BLACK;
     const int octave_text_on_color = ILI9488_BLACK;
-    const int octave_text_off_color = ILI9488_CYAN;
+    const int octave_text_off_color = DARK_GREY;
     const uint16_t octave_x = 93;
     const uint16_t octave_w = 85;
 
+    /*const int guitar_on_background_color = ILI9488_YELLOW;
+    const int guitar_off_background_color = ILI9488_BLACK;
+    const int guitar_text_on_color = ILI9488_BLACK;
+    const int guitar_text_off_color = ILI9488_YELLOW;*/
     const int guitar_on_background_color = ILI9488_YELLOW;
     const int guitar_off_background_color = ILI9488_BLACK;
     const int guitar_text_on_color = ILI9488_BLACK;
-    const int guitar_text_off_color = ILI9488_YELLOW;
+    const int guitar_text_off_color = DARK_GREY;
     const uint16_t guitar_x = 178;
     const uint16_t guitar_w = 79;
 
+    /*const int reverb_on_background_color = ILI9488_CYAN;
+    const int reverb_off_background_color = ILI9488_BLACK;
+    const int reverb_text_on_color = ILI9488_BLACK;
+    const int reverb_text_off_color = ILI9488_CYAN;*/
     const int reverb_on_background_color = ILI9488_CYAN;
     const int reverb_off_background_color = ILI9488_BLACK;
     const int reverb_text_on_color = ILI9488_BLACK;
-    const int reverb_text_off_color = ILI9488_CYAN;
+    const int reverb_text_off_color = DARK_GREY;
     const uint16_t reverb_x = 257;
     const uint16_t reverb_w = 86;
 
+    /*const int midi_on_background_color = 0xF9A0;
+    const int midi_off_background_color = ILI9488_BLACK;
+    const int midi_text_on_color = ILI9488_BLACK;
+    const int midi_text_off_color = 0xF9A0;*/
     const int midi_on_background_color = 0xF9A0;
     const int midi_off_background_color = ILI9488_BLACK;
     const int midi_text_on_color = ILI9488_BLACK;
-    const int midi_text_off_color = 0xF9A0;
-    const uint16_t midi_x = 343;
+    const int midi_text_off_color = DARK_GREY;
+    const uint16_t midi_x = 432;//343;
     const uint16_t midi_w = 48;
 
+    /*const int chorus_on_background_color = ILI9488_GREEN;
+    const int chorus_off_background_color = ILI9488_BLACK;
+    const int chorus_text_on_color = ILI9488_BLACK;
+    const int chorus_text_off_color = ILI9488_GREEN;*/
     const int chorus_on_background_color = ILI9488_GREEN;
     const int chorus_off_background_color = ILI9488_BLACK;
     const int chorus_text_on_color = ILI9488_BLACK;
-    const int chorus_text_off_color = ILI9488_GREEN;
-    const uint16_t chorus_x = 391;
+    const int chorus_text_off_color = DARK_GREY;
+    const uint16_t chorus_x = 343;//391;
     const uint16_t chorus_w = 89;
 
     ILI9488_t3 *screen;
