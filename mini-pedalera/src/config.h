@@ -24,6 +24,7 @@ extern const uint8_t PAGEDN_BUTTON_CC;
 extern const uint8_t NEXT_SONT_CC;
 extern const uint8_t GUITAR_SWICH_CC;
 extern const uint8_t MODE_CHANGE_CC;
+extern const uint8_t INSTRUMENT_CHANGE_CC;
 
 extern const uint8_t CHORD_A_LED_CC;
 extern const uint8_t OCTAVE_LED_CC;

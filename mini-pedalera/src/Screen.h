@@ -35,7 +35,6 @@ class Screen
     void clean();
     void writeTempMessage(const std::string line1, const std::string line2);
     void writeMessage(const std::string line1, const std::string line2);
-    void writeSongAndPart();
     void writeSongAndParts();
     void writeChord(std::string chord);
     void removeChord();
@@ -51,6 +50,7 @@ class Screen
     void showClock(int hours, int minutes, int seconds, int day, int month, int year);
     void writeStatusBar();
     void writeStatusBarParameter(uint8_t param_index, bool state);
+    void writeBassStatus();
 
   private:
     void doSlide(const std::vector<std::string> songs, uint8_t first_song, uint8_t song_index, int direction);
@@ -65,6 +65,11 @@ class Screen
     void writeButtonsModeBackground(uint8_t mode);
     //void writeBassStatus(bool status);
     //void writeBassBackground(bool status);
+    void writeOctaveParameter(bool status);
+    void writeGuitarParameter(bool status);
+    void writeReverbParameter(bool status);
+    void writeChorusParameter(bool status);
+    void writeMidiParameter(bool status);
     void writeStatusParameter(
       const char* parameter_text,
       bool status,
@@ -98,32 +103,49 @@ class Screen
     const uint16_t messages_height    = 178;
     const uint8_t message_size  = 1;
 
+    const ILI9341_t3_font_t song_number_font = Arial_24;
+    const int song_number_color = ILI9488_BLACK;
+    const int song_number_bg_color = ILI9488_CYAN;// 0x0420;// 0x0013;
+    const uint16_t song_number_bg_x = 0;
+    const uint16_t song_number_bg_y = 5;//7;
+    const uint16_t song_number_bg_w = 40;
+    const uint16_t song_number_bg_h = 27;
+    const uint16_t song_number_y_rel = 2;
+
     const ILI9341_t3_font_t song_name_font = Michroma_20;
     const int  song_name_color = ILI9488_WHITE;
-    const uint16_t song_name_x     = 30;
+    const uint16_t song_name_x     = 39;
     const uint16_t song_name_y     = 9;
+    const uint16_t song_name_width = 354;
+    const uint16_t song_name_height = 36;
     const uint8_t song_name_size  = 1;
 
     const ILI9341_t3_font_t song_part_font = Arial_20;
     const int song_part_number_color = ILI9488_WHITE;
-    const int song_part_color  = ILI9488_CYAN;
-    const int song_part_color_selected = ILI9488_YELLOW;
+    const int song_part_color  = ILI9488_DARKGREY;//ILI9488_CYAN;
+    const int song_part_color_selected = ILI9488_YELLOW;//ILI9488_YELLOW;
+    const int song_part_bg_color_selected = DARK_GREY;
     const int song_part_name_height = 34;
+    const int song_part_bg_width = 239;
+    const int song_part_bg_height = 29;
     const uint16_t song_part_x     = 0;
     const uint16_t song_part_y     = 17;
-    const uint16_t song_part_height = 260;
+    const uint16_t song_part_height = 249;
     const uint8_t song_part_size  = 1;
 
-    const ILI9341_t3_font_t chord_font = LiberationSansNarrow_40_Bold;
-    const int chord_bg_color = ILI9488_GREEN;
+    const ILI9341_t3_font_t chord_font = LiberationSansNarrow_32_Bold;
+    const int chord_bg_color = 0x502a;
     //const int  chord_color = 0x8FCF;
-    const int chord_color     = ILI9488_BLACK;
-    const uint16_t chord_x     = 120;
-    const uint16_t chord_y     = 12;
-    const uint16_t chord_bg_x     = 239;
-    const uint16_t chord_bg_y     = 99;
-    const uint16_t chord_bg_w     = 260;
+    const int chord_color     = ILI9488_WHITE;
+    const uint16_t chord_x     = 12;
+    const uint16_t chord_y     = 19;
+    const uint16_t chord_bg_x     = 249;
+    const uint16_t chord_bg_y     = 189;
+    const uint16_t chord_bg_w     = 225;
     const uint16_t chord_bg_h     = 66;
+    const uint16_t chord_shadow_w = 4;
+    const uint16_t chord_shadow_h = 4;
+    const int chord_shador_color = 0x528a;
     const uint8_t chord_size  = 1;
 
     const ILI9341_t3_font_t settings_font = Arial_20;
@@ -152,16 +174,16 @@ class Screen
     const int tuner_color_out = ILI9488_RED;
     const uint16_t tuner_needle_width = 14;
 
-    const ILI9341_t3_font_t clock_hour_font = Arial_24;
+    const ILI9341_t3_font_t clock_hour_font = Arial_16;
     const int clock_font_size = 1;
     const int clock_hour_color = 0xAD55;
-    const int clock_background_color = ILI9488_BLACK;
+    const int clock_background_color = SCREEN_BG_COLOR;
     const ILI9341_t3_font_t clock_date_font = Arial_20;
     const int clock_date_color = ILI9488_YELLOW;
     const uint16_t clock_x = 394;
-    const uint16_t clock_y = 4;
+    const uint16_t clock_y = 35;
     const uint16_t clock_w = 86;
-    const uint16_t clock_h = 28;
+    const uint16_t clock_h = 23;
 
     const ILI9341_t3_font_t status_bar_font = LiberationSansNarrow_16_Bold;
     const int status_bar_font_size = 1;
@@ -169,24 +191,25 @@ class Screen
     const uint16_t status_bar_h = 23;
     const uint16_t status_bar_text_y = 300;
 
-    const int effects_mode_color = ILI9488_BLACK;
-    const int effects_mode_background_color = 0x0DE8;
-    const int chords_mode_color = ILI9488_BLACK;
-    const int chords_mode_background_color = ILI9488_RED;
+    const int effects_mode_color = ILI9488_WHITE;//ILI9488_BLACK;
+    const int effects_mode_background_color = 0x0420;//0x0DE8;
+    const int chords_mode_color = ILI9488_WHITE;//ILI9488_BLACK;
+    const int chords_mode_background_color = 0x0013;//ILI9488_RED;
     const uint16_t buttons_mode_x = 0;
     const uint16_t buttons_mode_w = 93;
 
-    /*const int bass_on_background_color = ILI9488_CYAN;
-    const int bass_off_background_color = ILI9488_BLACK;
-    const int bass_text_on_color = ILI9488_BLACK;
-    const int bass_text_off_color = ILI9488_CYAN;
-    const uint16_t bass_x = 82;
-    const uint16_t bass_w = 60;*/
+    const int bass_status_background_off_color = ILI9488_RED;
+    const int bass_status_background_on_color = ILI9488_GREEN;
+    const ILI9341_t3_font_t bass_status_font = LiberationSansNarrow_16_Bold;
+    const int bass_status_font_size = 1;
+    const int bass_status_on_color = ILI9488_BLACK;
+    const int bass_status_off_color = ILI9488_BLACK;
+    const uint16_t bass_status_x = 394;
+    const uint16_t bass_status_y = 4;
+    const uint16_t bass_status_w = 86;
+    const uint16_t bass_status_h = 23;
+    const uint16_t bass_status_text_y = 4;
 
-    /*const int octave_on_background_color = ILI9488_CYAN;
-    const int octave_off_background_color = ILI9488_BLACK;
-    const int octave_text_on_color = ILI9488_BLACK;
-    const int octave_text_off_color = ILI9488_CYAN;*/
     const int octave_on_background_color = ILI9488_CYAN;
     const int octave_off_background_color = ILI9488_BLACK;
     const int octave_text_on_color = ILI9488_BLACK;
@@ -194,10 +217,6 @@ class Screen
     const uint16_t octave_x = 93;
     const uint16_t octave_w = 85;
 
-    /*const int guitar_on_background_color = ILI9488_YELLOW;
-    const int guitar_off_background_color = ILI9488_BLACK;
-    const int guitar_text_on_color = ILI9488_BLACK;
-    const int guitar_text_off_color = ILI9488_YELLOW;*/
     const int guitar_on_background_color = ILI9488_YELLOW;
     const int guitar_off_background_color = ILI9488_BLACK;
     const int guitar_text_on_color = ILI9488_BLACK;
@@ -205,10 +224,6 @@ class Screen
     const uint16_t guitar_x = 178;
     const uint16_t guitar_w = 79;
 
-    /*const int reverb_on_background_color = ILI9488_CYAN;
-    const int reverb_off_background_color = ILI9488_BLACK;
-    const int reverb_text_on_color = ILI9488_BLACK;
-    const int reverb_text_off_color = ILI9488_CYAN;*/
     const int reverb_on_background_color = ILI9488_CYAN;
     const int reverb_off_background_color = ILI9488_BLACK;
     const int reverb_text_on_color = ILI9488_BLACK;
@@ -216,10 +231,6 @@ class Screen
     const uint16_t reverb_x = 257;
     const uint16_t reverb_w = 86;
 
-    /*const int midi_on_background_color = 0xF9A0;
-    const int midi_off_background_color = ILI9488_BLACK;
-    const int midi_text_on_color = ILI9488_BLACK;
-    const int midi_text_off_color = 0xF9A0;*/
     const int midi_on_background_color = 0xF9A0;
     const int midi_off_background_color = ILI9488_BLACK;
     const int midi_text_on_color = ILI9488_BLACK;
@@ -227,10 +238,6 @@ class Screen
     const uint16_t midi_x = 432;//343;
     const uint16_t midi_w = 48;
 
-    /*const int chorus_on_background_color = ILI9488_GREEN;
-    const int chorus_off_background_color = ILI9488_BLACK;
-    const int chorus_text_on_color = ILI9488_BLACK;
-    const int chorus_text_off_color = ILI9488_GREEN;*/
     const int chorus_on_background_color = ILI9488_GREEN;
     const int chorus_off_background_color = ILI9488_BLACK;
     const int chorus_text_on_color = ILI9488_BLACK;
