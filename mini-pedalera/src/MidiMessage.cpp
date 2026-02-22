@@ -60,6 +60,9 @@ void MidiMessage::processLedMessage(uint8_t cc, uint8_t value)
   if (param_index >= 0) {
     screen->writeStatusBarParameter(param_index, state);
   }
+  if (param_index == 1 || param_index == 3) {
+    screen->writeBassStatus();
+  }
 }
 
 void MidiMessage::processButtonModeMessage(uint8_t cc, uint8_t value)

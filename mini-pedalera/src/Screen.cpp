@@ -26,11 +26,10 @@ void Screen::clean()
 
 void Screen::writeTempMessage(const std::string line1, const std::string line2)
 {
-  removeMessage();
+  clean();
   writeMessage(line1, line2);
   delay(TEMP_MESSAGE_DELAY);
-  removeMessage();
-  writeSongAndPart();
+  clean();
 }
 
 void Screen::removeMessage()
@@ -62,21 +61,31 @@ void Screen::writeSongAndParts()
     writeMessage("No", "setlist");
     return;
   }
-  screen->fillRect(0, 0, 480, 36, SCREEN_BG_COLOR);
+  screen->fillRect(song_name_x, 0, song_name_width, song_name_height, SCREEN_BG_COLOR);
   screen->fillRect(0, 36, 240, song_part_height, SCREEN_BG_COLOR);
 
   screen->setFont(song_name_font);
   screen->setTextSize(song_name_size);
   screen->setTextWrap(false);
 
-  const std::string song = SongList::getCurrentSong();
-  std::vector<std::string> part_list = SongList::getPartList();
-  //int16_t song_name_x = getCenteredXFromText(song);
+  const uint8_t song_number = SongList::getCurrentSongIndex() + 1;
+  char song_number_text[4]; // suficiente para uint8_t (0-255)
+  sprintf(song_number_text, "%d", song_number);
+  
+  screen->fillRoundRect(song_number_bg_x, song_number_bg_y, song_number_bg_w, song_number_bg_h, 3, song_number_bg_color);
 
+  screen->setFont(song_number_font);
+  screen->setTextColor(song_number_color);
+  screen->setCursor(song_number_bg_x + getCenteredXFromTextInWidth(song_number_text, song_number_bg_w) - 1, song_number_bg_y + song_number_y_rel);
+  screen->print(song_number);
+
+  screen->setFont(song_name_font);
   screen->setTextColor(song_name_color);
-  screen->setCursor(song_name_x, song_name_y);
+  const std::string song = SongList::getCurrentSong();
+  screen->setCursor(song_name_x + getCenteredXFromTextInWidth(song.c_str(), song_name_width), song_name_y);
   screen->print(song.c_str());
 
+  std::vector<std::string> part_list = SongList::getPartList();
   writeParts(part_list, SongList::getCurrentSongPartIndex());
 
   time_t current_time = now();
@@ -112,70 +121,44 @@ void Screen::writeParts(std::vector<std::string> part_list, uint8_t current_part
       }
     }
   }
-
   writePartView(part_list, first_part_index, last_part_index, current_part);
 }
 
 void Screen::writePartView(std::vector<std::string> part_list, uint8_t first_index, uint8_t last_index, uint8_t current_part)
 {
   for (uint8_t i = first_index; i <= last_index; i ++) {
+    int text_color = song_part_color;
+    int bg_color = SCREEN_BG_COLOR;
+    if (i == current_part) {
+      text_color = song_part_color_selected;
+      bg_color   = song_part_bg_color_selected;
+    }
     screen->setTextColor(song_part_number_color);
-    screen->setCursor(0, song_part_name_height * (i - first_index + 1) + song_part_y);
+    int y_pos = song_part_name_height * (i - first_index + 1) + song_part_y;
+    screen->fillRect(song_part_x, y_pos - 4, song_part_bg_width, song_part_bg_height, bg_color);
+    screen->setCursor(song_part_x, y_pos);
     screen->print(i + 1);
     screen->print(". ");
-    if (i == current_part) {
-      screen->setTextColor(song_part_color_selected);
-    } else {
-      screen->setTextColor(song_part_color);
-    }
+    screen->setTextColor(text_color);
     screen->print(part_list[i].c_str());
   }
 }
 
-void Screen::writeSongAndPart()
-{
-  if (SongList::getNumberOfSongs() == 0) {
-    writeMessage("No", "setlist");
-    return;
-  }
-
-  const std::string song = SongList::getCurrentSong();
-  const std::string part = SongList::getCurrentPart();
-
-  screen->fillRect(0, 0, 480, 279, SCREEN_BG_COLOR);
-  screen->setFont(song_name_font);
-  screen->setTextSize(song_name_size);
-  screen->setTextWrap(false);
-
-  int16_t centered_x = getCenteredXFromText(song);
-
-  screen->setTextColor(song_name_color);
-  screen->setCursor(centered_x, song_name_y);
-  screen->print(song.c_str());
-
-  screen->setFont(song_part_font);
-  screen->setTextSize(song_part_size);
-
-  centered_x = getCenteredXFromText(part);
-
-  screen->setTextColor(song_part_color);
-  screen->setCursor(centered_x, song_part_y);
-  screen->print(part.c_str());
-}
-
 void Screen::writeChord(std::string chord)
 {
-  screen->fillRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, chord_bg_color);
+  screen->fillRoundRect(chord_bg_x + chord_shadow_w, chord_bg_y + chord_shadow_h, chord_bg_w, chord_bg_h, 8, chord_shador_color);
+  screen->fillRoundRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, 8, chord_bg_color);
+  screen->drawRoundRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, 8, ILI9488_LIGHTGREY);
   screen->setFont(chord_font);
   screen->setTextSize(chord_size);
   screen->setTextColor(chord_color);
-  screen->setCursor(chord_x + getCenteredXFromText(chord.c_str()), chord_bg_y + chord_y);
+  screen->setCursor(chord_bg_x + getCenteredXFromTextInWidth(chord.c_str(), chord_bg_w), chord_bg_y + chord_y);
   screen->print(chord.c_str());
 }
 
 void Screen::removeChord()
 {
-  screen->fillRect(chord_bg_x, chord_bg_y, chord_bg_w, chord_bg_h, SCREEN_BG_COLOR);
+  screen->fillRect(chord_bg_x, chord_bg_y, chord_bg_w + chord_shadow_w, chord_bg_h + chord_shadow_h, SCREEN_BG_COLOR);
 }
 
 void Screen::writeSectionTitle(char *title)
@@ -428,13 +411,11 @@ void Screen::showClockBackground()
 
 void Screen::showClock(int hours, int minutes, int seconds, int day, int month, int year)
 {
-  //clean();
   screen->fillRect(clock_x, clock_y, clock_w, clock_h, clock_background_color);
 
   screen->setFont(clock_hour_font);
   screen->setTextSize(clock_font_size);
   screen->setTextColor(clock_hour_color);
-  screen->setCursor(clock_x, clock_y);
   char hour_txt[6];
   hour_txt[0] = '0' + ((hours / 10) % 10);
   hour_txt[1] = '0' + (hours % 10);
@@ -442,25 +423,8 @@ void Screen::showClock(int hours, int minutes, int seconds, int day, int month, 
   hour_txt[3] = '0' + ((minutes / 10) % 10);
   hour_txt[4] = '0' + (minutes % 10);
   hour_txt[5] = 0;
+  screen->setCursor(clock_x + getCenteredXFromTextInWidth(hour_txt, clock_w), clock_y);
   screen->print(hour_txt);
-
-  /*screen->setFont(clock_date_font);
-  screen->setTextSize(clock_font_size);
-  screen->setTextColor(clock_date_color);
-  screen->setCursor(18, 90);
-  char date_txt[11];
-  date_txt[0] = '0' + ((day / 10) % 10);
-  date_txt[1] = '0' + (day % 10);
-  date_txt[2] = '/';
-  date_txt[3] = '0' + ((month / 10) % 10);
-  date_txt[4] = '0' + (month % 10);
-  date_txt[5] = '/';
-  date_txt[6] = '0' + ((year / 1000) % 10);
-  date_txt[7] = '0' + ((year / 100) % 10);
-  date_txt[8] = '0' + ((year / 10) % 10);
-  date_txt[9] = '0' + (year % 10);
-  date_txt[10] = 0;
-  screen->print(date_txt);*/
 }
 
 void Screen::writeStatusBarParameter(uint8_t param_index, bool state)
@@ -472,64 +436,22 @@ void Screen::writeStatusBarParameter(uint8_t param_index, bool state)
     writeButtonsMode(state ? 1 : 0);
   }
   if (param_index == 2) {
-    writeStatusParameter(
-      "OCTAVE",
-      state,
-      octave_text_off_color,
-      octave_off_background_color,
-      octave_text_on_color,
-      octave_on_background_color,
-      octave_x,
-      octave_w
-    );
+    writeOctaveParameter(state);
   }
   if (param_index == 3) {
-    writeStatusParameter(
-      "GUITAR",
-      state,
-      guitar_text_off_color,
-      guitar_off_background_color,
-      guitar_text_on_color,
-      guitar_on_background_color,
-      guitar_x,
-      guitar_w
-    );
+    writeGuitarParameter(state);
   }
   if (param_index == 4) {
-    writeStatusParameter(
-      "REVERB",
-      state,
-      reverb_text_off_color,
-      reverb_off_background_color,
-      reverb_text_on_color,
-      reverb_on_background_color,
-      reverb_x,
-      reverb_w
-    );
+    writeReverbParameter(state);
   }
   if (param_index == 5) {
-    writeStatusParameter(
-      "MIDI",
-      state,
-      midi_text_off_color,
-      midi_off_background_color,
-      midi_text_on_color,
-      midi_on_background_color,
-      midi_x,
-      midi_w
-    );
+    writeMidiParameter(state);
   }
   if (param_index == 6) {
-    writeStatusParameter(
-      "CHORUS",
-      state,
-      chorus_text_off_color,
-      chorus_off_background_color,
-      chorus_text_on_color,
-      chorus_on_background_color,
-      chorus_x,
-      chorus_w
-    );
+    writeChorusParameter(state);
+  }
+  if (param_index == 12) {
+    writeBassStatus();
   }
 }
 
@@ -539,79 +461,23 @@ void Screen::writeStatusBar()
 
   screen->setFont(status_bar_font);
   screen->setTextSize(status_bar_font_size);
-  uint8_t mode = params[0] ? 1 : 0;
 
-  writeButtonsMode(mode);
-  /*writeStatusParameter(
-    "BASS",
-    params[1] ? true : false,
-    bass_text_off_color,
-    bass_off_background_color,
-    bass_text_on_color,
-    bass_on_background_color,
-    bass_x,
-    bass_w
-  );*/
-  writeStatusParameter(
-    "OCTAVE",
-    params[2] ? true : false,
-    octave_text_off_color,
-    octave_off_background_color,
-    octave_text_on_color,
-    octave_on_background_color,
-    octave_x,
-    octave_w
-  );
-  writeStatusParameter(
-    "GUITAR",
-    params[3] ? true : false,
-    guitar_text_off_color,
-    guitar_off_background_color,
-    guitar_text_on_color,
-    guitar_on_background_color,
-    guitar_x,
-    guitar_w
-  );
-  writeStatusParameter(
-    "REVERB",
-    params[4] ? true : false,
-    reverb_text_off_color,
-    reverb_off_background_color,
-    reverb_text_on_color,
-    reverb_on_background_color,
-    reverb_x,
-    reverb_w
-  );
-  writeStatusParameter(
-    "MIDI",
-    params[5] ? true : false,
-    midi_text_off_color,
-    midi_off_background_color,
-    midi_text_on_color,
-    midi_on_background_color,
-    midi_x,
-    midi_w
-  );
-  writeStatusParameter(
-    "CHORUS",
-    params[6] ? true : false,
-    chorus_text_off_color,
-    chorus_off_background_color,
-    chorus_text_on_color,
-    chorus_on_background_color,
-    chorus_x,
-    chorus_w
-  );
+  writeButtonsMode(params[0] ? 1 : 0);
+  writeOctaveParameter(params[2]);
+  writeGuitarParameter(params[3]);
+  writeReverbParameter(params[4]);
+  writeMidiParameter(params[5]);
+  writeChorusParameter(params[6]);
 }
 
 void Screen::writeButtonsMode(uint8_t mode)
 {
   writeButtonsModeBackground(mode);
   int text_color = effects_mode_color;
-  char mode_text[12] = "EFFECTS";
+  char mode_text[12] = "EFX";
   if (mode == 1) {
     text_color = chords_mode_color;
-    strcpy(mode_text, "CHORDS");
+    strcpy(mode_text, "CHD");
   }
   screen->setTextColor(text_color);
   screen->setCursor(buttons_mode_x + getCenteredXFromTextInWidth(mode_text, buttons_mode_w), status_bar_text_y);
@@ -624,7 +490,80 @@ void Screen::writeButtonsModeBackground(uint8_t mode)
   if (mode == 1) {
     background_color = chords_mode_background_color;
   }
+  screen->drawLine(0, status_bar_y - 2, 479, status_bar_y - 2, background_color);
+  screen->drawLine(0, status_bar_y - 1, 479, status_bar_y - 1, background_color);
+  
   screen->fillRect(buttons_mode_x, status_bar_y, buttons_mode_w, status_bar_h, background_color);
+}
+
+void Screen::writeOctaveParameter(bool status)
+{
+  writeStatusParameter(
+    "OCTAVE",
+    status,
+    octave_text_off_color,
+    octave_off_background_color,
+    octave_text_on_color,
+    octave_on_background_color,
+    octave_x,
+    octave_w
+  );
+}
+
+void Screen::writeGuitarParameter(bool status)
+{
+  writeStatusParameter(
+    "GUITAR",
+    status,
+    guitar_text_off_color,
+    guitar_off_background_color,
+    guitar_text_on_color,
+    guitar_on_background_color,
+    guitar_x,
+    guitar_w
+  );
+}
+
+void Screen::writeReverbParameter(bool status)
+{
+  writeStatusParameter(
+    "REVERB",
+    status,
+    reverb_text_off_color,
+    reverb_off_background_color,
+    reverb_text_on_color,
+    reverb_on_background_color,
+    reverb_x,
+    reverb_w
+  );
+}
+
+void Screen::writeChorusParameter(bool status)
+{
+  writeStatusParameter(
+    "CHORUS",
+    status,
+    chorus_text_off_color,
+    chorus_off_background_color,
+    chorus_text_on_color,
+    chorus_on_background_color,
+    chorus_x,
+    chorus_w
+  );
+}
+
+void Screen::writeMidiParameter(bool status)
+{
+  writeStatusParameter(
+    "MIDI",
+    status,
+    midi_text_off_color,
+    midi_off_background_color,
+    midi_text_on_color,
+    midi_on_background_color,
+    midi_x,
+    midi_w
+  );
 }
 
 void Screen::writeStatusParameter(
@@ -644,8 +583,27 @@ void Screen::writeStatusParameter(
     text_color = text_on_color;
     background_color = background_on_color;
   }
+
   screen->fillRect(x, status_bar_y, w, status_bar_h, background_color);
   screen->setTextColor(text_color);
   screen->setCursor(x + getCenteredXFromTextInWidth(parameter_text, w), status_bar_text_y);
   screen->print(parameter_text);
+}
+
+void Screen::writeBassStatus()
+{
+  int background_color = bass_status_background_off_color;
+  int text_color = bass_status_off_color;
+  if (Status::isBassActive()) {
+    background_color = bass_status_background_on_color;
+    text_color = bass_status_on_color;
+  }
+  screen->fillRect(bass_status_x, bass_status_y, bass_status_w, bass_status_h, background_color);
+
+  screen->setFont(bass_status_font);
+  screen->setTextSize(bass_status_font_size);
+  screen->setTextColor(text_color);
+  const char* bass_text = Status::getInstrument();
+  screen->setCursor(bass_status_x + getCenteredXFromTextInWidth(bass_text, bass_status_w), bass_status_y + bass_status_text_y);
+  screen->print(bass_text);
 }

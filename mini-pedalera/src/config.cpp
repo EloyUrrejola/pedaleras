@@ -22,6 +22,7 @@ const uint8_t NEXT_SONT_CC = 91;
 const uint8_t GUITAR_SWICH_CC = 89;
 
 const uint8_t MODE_CHANGE_CC = 3;
+const uint8_t INSTRUMENT_CHANGE_CC = 9;
 
 const uint8_t CHORD_A_LED_CC = 26;
 const uint8_t OCTAVE_LED_CC = 15;

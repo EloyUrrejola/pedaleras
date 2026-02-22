@@ -7,7 +7,10 @@ class Status
 {
   public:
     static int setParameter(uint8_t cc, bool state);
-    static const bool* getAll(); 
+    static const bool* getAll();
+    static const int getMode();
+    static bool isBassActive();
+    static const char* getInstrument();
     
   private:
     static bool chord_mode;
@@ -22,6 +25,7 @@ class Status
     static bool chord_B;
     static bool chord_C;
     static bool chord_D;
+    static bool instrument;
 
     struct Mapping {
         uint8_t cc;

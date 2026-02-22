@@ -136,7 +136,9 @@ void SysExMessage::getSongAndPartsFromMessage(std::string message)
 
     SongList::addParts(part_list);
   }
-    
+  
+  screen->writeBassStatus();
+  screen->writeStatusBar();
   screen->writeSongAndParts();
   Led::setStatusLeds();
 }

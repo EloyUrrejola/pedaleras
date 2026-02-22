@@ -76,6 +76,7 @@ void start()
   // Hay que dar tiempo a que GP conecte con el puerto USB.
   // Habrá que hacer un ping antes.
   delay(1000);
+  screen.writeBassStatus();
   screen.writeStatusBar();
   requestSetlist();
 }
@@ -152,6 +153,7 @@ void settingsMode()
 void exitSettingsMode()
 {
   screen.clean();
+  screen.writeBassStatus();
   screen.writeSongAndParts();
   screen.writeStatusBar();
   Led::setStatusLeds();
@@ -172,6 +174,7 @@ void songSelectorMode()
 void exitSongSelectorMode()
 {
   screen.clean();
+  screen.writeBassStatus();
   screen.writeSongAndParts();
   screen.writeStatusBar();
   Led::setStatusLeds();
@@ -188,7 +191,10 @@ void tunerMode()
 void exitTunerMode()
 {
   screen.clean();
+  screen.writeBassStatus();
   screen.writeSongAndParts();
+  screen.writeStatusBar();
+  Led::setStatusLeds();
 }
 
 #endif

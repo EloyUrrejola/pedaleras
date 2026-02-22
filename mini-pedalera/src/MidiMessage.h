@@ -29,6 +29,7 @@ class MidiMessage
     void processButtonModeMessage(uint8_t cc, uint8_t value);
     void processSettingMessage(uint8_t cc, uint8_t value);
     void processModeMessage(uint8_t cc, uint8_t value);
+    void processInstrumentMessage(uint8_t cc, uint8_t value);
     int getLedIndexByCc(uint8_t cc);
     int getButtonIndexBySetMomentaryCc(uint8_t cc);
     bool valueToState(uint8_t value);
