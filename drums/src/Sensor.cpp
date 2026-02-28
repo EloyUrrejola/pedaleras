@@ -57,13 +57,31 @@ void Sensor::setReadyState(bool ready) {
     }
 }
 
-void Sensor::setChordState(bool chord) {
-    chordState = chord;
-    if (ledChord) {
-        if (chord) {
-            ledChord->turnOn();
-        } else {
-            ledChord->turnOff();
+void Sensor::setChordLeds(Led** leds, uint8_t count) {
+    chordLedCount = (count > MAX_CHORD_LEDS) ? MAX_CHORD_LEDS : count;
+
+    for (uint8_t i = 0; i < chordLedCount; i++) {
+        chordLeds[i] = leds[i];
+    }
+}
+
+void Sensor::setChordState(uint8_t value) {
+    if (chordLedCount == 0) {
+        return;
+    }
+
+    // Apagar todos
+    for (uint8_t i = 0; i < chordLedCount; i++) {
+        if (chordLeds[i]) {
+            chordLeds[i]->turnOff();
+        }
+    }
+
+    // Encender el seleccionado
+    if (value > 0) {
+        uint8_t index = (value - 1) % chordLedCount;
+        if (chordLeds[index]) {
+            chordLeds[index]->turnOn();
         }
     }
 }
@@ -76,9 +94,6 @@ void Sensor::update() {
         sendTrigger();
         lastTrigger = millis();
 
-        if (ledBounce) {
-            ledBounce->pulse();
-        }
         if (ledCcSend) {
             ledCcSend->pulse();
         }
@@ -86,9 +101,6 @@ void Sensor::update() {
 
     wasAbove = isAbove;
 
-    if (ledBounce) {
-        ledBounce->update();
-    }
     if (ledCcSend) {
         ledCcSend->update();
     }

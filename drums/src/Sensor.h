@@ -30,7 +30,10 @@ public:
     void setMidiInterface(MidiInterface *midiInterface);
 
     void setReadyState(bool ready);
-    void setChordState(bool chord);
+    //void setChordState(bool chord);
+
+    void setChordLeds(Led** leds, uint8_t count);
+    void setChordState(uint8_t value);
 
     uint8_t triggerCc;
     uint8_t thresholdCc;
@@ -40,9 +43,11 @@ public:
     uint8_t chordStateCc;
 
     Led *ledReady = nullptr;
-    Led *ledChord = nullptr;
-    Led *ledBounce = nullptr;
     Led *ledCcSend = nullptr;
+
+    static const uint8_t MAX_CHORD_LEDS = 4;
+    Led* chordLeds[MAX_CHORD_LEDS] = { nullptr };
+    uint8_t chordLedCount = 0;
 
 private:
     void sendTrigger();
@@ -57,7 +62,6 @@ private:
     const uint8_t topVelocity = DEFAULT_TOP_VELOCITY;
 
     bool readyState = false;
-    bool chordState = false;
 
     MidiInterface *midi = nullptr;
 };

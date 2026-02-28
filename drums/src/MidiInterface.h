@@ -2,6 +2,8 @@
 #define MIDIINTERFACE_H
 
 #include <Arduino.h>
+#include <Adafruit_TinyUSB.h>
+extern Adafruit_USBD_MIDI usbMIDI;
 
 class Sensor;
 class Led;
@@ -14,6 +16,7 @@ public:
     MidiInterface();
 
     void begin();
+    void update();
     void registerSensors(Sensor **sensorArray, uint8_t numberOfSensors);
     void sendControlChange(uint8_t control, uint8_t value);
     void handleControlChange(uint8_t channel, uint8_t control, uint8_t value);

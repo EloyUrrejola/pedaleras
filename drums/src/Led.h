@@ -8,6 +8,8 @@ class Led
 public:
     Led(uint8_t pin, unsigned long pulseMs = 250);
 
+    static const uint8_t LED_ON = 75;
+
     void turnOn();
     void turnOff();
     void pulse();

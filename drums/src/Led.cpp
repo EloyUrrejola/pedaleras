@@ -10,25 +10,24 @@ Led::Led(uint8_t pin, unsigned long pulseMs) {
 }
 
 void Led::turnOn() {
-    digitalWrite(ledPin, HIGH);
+    analogWrite(ledPin, LED_ON);
     isPulsing = false;
 }
 
 void Led::turnOff() {
-    digitalWrite(ledPin, LOW);
+    analogWrite(ledPin, LOW);
     isPulsing = false;
 }
 
 void Led::pulse() {
-    pinMode(13, OUTPUT);
-    digitalWrite(ledPin, HIGH);
+    analogWrite(ledPin, LED_ON);
     isPulsing = true;
     lastPulseMillis = millis();
 }
 
 void Led::update() {
     if (isPulsing && millis() - lastPulseMillis >= pulseDurationMs) {
-        digitalWrite(ledPin, LOW);
+        analogWrite(ledPin, LOW);
         isPulsing = false;
     }
 }
