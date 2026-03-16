@@ -22,10 +22,10 @@ const uint8_t SENSOR_RETRIGGER_CCS[NUMBER_OF_SENSORS] = {25};
 const uint8_t SENSOR_PIN = 26;
 const uint8_t SENSOR_PINS[NUMBER_OF_SENSORS] = {SENSOR_PIN};
 // Pines para LEDs
-const uint8_t GREEN_LED_PIN = 11;
-const uint8_t BLUE_LED_PIN_1 = 12;
-const uint8_t BLUE_LED_PIN_2 = 13;
-const uint8_t YELLOW_LED_PIN = 14;
+const uint8_t GREEN_LED_PIN = 5;
+const uint8_t BLUE_LED_PIN_1 = 2;
+const uint8_t BLUE_LED_PIN_2 = 11;
+const uint8_t YELLOW_LED_PIN = 8;
 
 const uint8_t LED_READY_PINS[NUMBER_OF_SENSORS] = {GREEN_LED_PIN};
 const uint8_t CHORD_LEDS_PER_SENSOR = 2;
@@ -80,30 +80,30 @@ void setup()
 void start()
 {
     for (uint8_t i = 0; i < 3; i++) {
-        analogWrite(11, 255);
+        analogWrite(BLUE_LED_PIN_1, 255);
         delay(200);
-        analogWrite(11, 0);
-        analogWrite(12, 255);
+        analogWrite(BLUE_LED_PIN_1, 0);
+        analogWrite(GREEN_LED_PIN, 255);
         delay(200);
-        analogWrite(12, 0);
-        analogWrite(13, 255);
+        analogWrite(GREEN_LED_PIN, 0);
+        analogWrite(YELLOW_LED_PIN, 255);
         delay(200);
-        analogWrite(13, 0);
-        analogWrite(14, 255);
+        analogWrite(YELLOW_LED_PIN, 0);
+        analogWrite(BLUE_LED_PIN_2, 255);
         delay(200);
-        analogWrite(14, 0);
+        analogWrite(BLUE_LED_PIN_2, 0);
     }
     for (uint8_t i = 0; i < 3; i++) {
         delay(200);
-        analogWrite(11, 255);
-        analogWrite(12, 255);
-        analogWrite(13, 255);
-        analogWrite(14, 255);
+        analogWrite(GREEN_LED_PIN, 255);
+        analogWrite(BLUE_LED_PIN_1, 255);
+        analogWrite(BLUE_LED_PIN_2, 255);
+        analogWrite(YELLOW_LED_PIN, 255);
         delay(500);
-        analogWrite(11, 0);
-        analogWrite(12, 0);
-        analogWrite(13, 0);
-        analogWrite(14, 0);
+        analogWrite(GREEN_LED_PIN, 0);
+        analogWrite(BLUE_LED_PIN_1, 0);
+        analogWrite(BLUE_LED_PIN_2, 0);
+        analogWrite(YELLOW_LED_PIN, 0);
     }
 }
 
