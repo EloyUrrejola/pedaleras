@@ -25,17 +25,12 @@ Sensor::Sensor(
 }
 
 void Sensor::setThreshold(uint8_t value) {
-    threshold = map(value, 0, 127, 0, 1023);
-    float h = map(value, 0, 127, 0, 30) / 100.0;
-    hysteresisAmount = threshold * h;
+    threshold = map(value, 0, 127, 1, 1023);
     Serial.print("threshold: ");
     Serial.println(threshold);
-    Serial.print("hysteresisAmount: ");
-    Serial.println(hysteresisAmount);
 }
 void Sensor::setHysteresis(uint8_t value) {
-    float h = map(value, 0, 127, 0, 30) / 100.0;
-    hysteresisAmount = threshold * h;
+    hysteresisAmount = map(value, 0, 127, 0, 1023);
     Serial.print("hysteresisAmount: ");
     Serial.println(hysteresisAmount);
 }
