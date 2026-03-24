@@ -80,6 +80,7 @@ void setup()
 void start()
 {
     for (uint8_t i = 0; i < 3; i++) {
+        delay(200);
         analogWrite(BLUE_LED_PIN_1, 255);
         delay(200);
         analogWrite(BLUE_LED_PIN_1, 0);
@@ -93,18 +94,39 @@ void start()
         delay(200);
         analogWrite(BLUE_LED_PIN_2, 0);
     }
+
+    /*delay(200);
+    analogWrite(GREEN_LED_PIN, 255);
+    analogWrite(BLUE_LED_PIN_1, 255);
+    analogWrite(BLUE_LED_PIN_2, 255);
+    analogWrite(YELLOW_LED_PIN, 255);
+    delay(400);
+    analogWrite(GREEN_LED_PIN, 0);
+    analogWrite(BLUE_LED_PIN_1, 0);
+    analogWrite(BLUE_LED_PIN_2, 0);
+    analogWrite(YELLOW_LED_PIN, 0);*/
+    
     for (uint8_t i = 0; i < 3; i++) {
-        delay(200);
-        analogWrite(GREEN_LED_PIN, 255);
-        analogWrite(BLUE_LED_PIN_1, 255);
-        analogWrite(BLUE_LED_PIN_2, 255);
-        analogWrite(YELLOW_LED_PIN, 255);
-        delay(500);
-        analogWrite(GREEN_LED_PIN, 0);
-        analogWrite(BLUE_LED_PIN_1, 0);
-        analogWrite(BLUE_LED_PIN_2, 0);
-        analogWrite(YELLOW_LED_PIN, 0);
+        delay(100);
+        for (uint8_t j = 0; j < 255; j++) {
+            delay(1);
+            analogWrite(GREEN_LED_PIN, j);
+            analogWrite(BLUE_LED_PIN_1, j);
+            analogWrite(BLUE_LED_PIN_2, j);
+            analogWrite(YELLOW_LED_PIN, j);
+        }
+        for (uint8_t j = 255; j > 0 ; j--) {
+            delay(1);
+            analogWrite(GREEN_LED_PIN, j);
+            analogWrite(BLUE_LED_PIN_1, j);
+            analogWrite(BLUE_LED_PIN_2, j);
+            analogWrite(YELLOW_LED_PIN, j);
+        }
     }
+    analogWrite(GREEN_LED_PIN, 0);
+    analogWrite(BLUE_LED_PIN_1, 0);
+    analogWrite(BLUE_LED_PIN_2, 0);
+    analogWrite(YELLOW_LED_PIN, 0);
 }
 
 void loop()
