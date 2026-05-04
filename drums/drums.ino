@@ -1,8 +1,6 @@
 #ifndef DRUMS_INO
 #define DRUMS_INO
 
-#define USB_MIDI_PRODUCT_NAME "MIDI Pads"
-
 #include "src/Sensor.h"
 #include "src/MidiInterface.h"
 #include "src/Led.h"

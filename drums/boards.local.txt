@@ -1,0 +1,3 @@
+rpipico.build.usb_product="MIDI pads 1"
+rpipico.build.usb_pid=0x0011
+rpipico.build.usb_manufacturer="Eloy"
