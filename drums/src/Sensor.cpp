@@ -22,24 +22,40 @@ Sensor::Sensor(
     retriggerIntervalMs = DEFAULT_RETRIGGER_MS;
 
     lastTrigger = 0;
+    thresholdLastChange = 0;
 }
 
 void Sensor::setThreshold(uint8_t value) {
     threshold = map(value, 0, 127, 1, 1023);
-    Serial.print("threshold: ");
-    Serial.println(threshold);
+    turnOnAllLeds();
 }
+
 void Sensor::setHysteresis(uint8_t value) {
     hysteresisAmount = map(value, 0, 127, 0, 1023);
-    Serial.print("hysteresisAmount: ");
-    Serial.println(hysteresisAmount);
+    turnOnAllLeds();
 }
+
 void Sensor::setRetriggerMs(uint8_t value) {
     retriggerIntervalMs = map(value, 0, 127, 0, 250);
-    Serial.print("retriggerIntervalMs: ");
-    Serial.println(retriggerIntervalMs);
+    turnOnAllLeds();
 }
-void Sensor::setMidiInterface(MidiInterface *midiInterface) { midi = midiInterface; }
+
+void Sensor::turnOnAllLeds() {
+    for (uint8_t i = 0; i < chordLedCount; i++) {
+        if (chordLeds[i]) {
+            chordLeds[i]->turnOn();
+        }
+    }
+    ledReady->turnOn();
+    ledCcSend->turnOn();
+
+    // Reiniciar temporizador
+    thresholdLastChange = millis();
+}
+
+void Sensor::setMidiInterface(MidiInterface *midiInterface) {
+    midi = midiInterface;
+}
 
 void Sensor::setReadyState(bool ready) {
     readyState = ready;
@@ -83,7 +99,10 @@ void Sensor::setChordState(uint8_t value) {
 
 void Sensor::update() {
     int sensorValue = analogRead(sensorPin);
-    bool isAbove = !wasAbove ? sensorValue >= threshold : sensorValue >= (threshold - hysteresisAmount);
+
+    bool isAbove = !wasAbove
+        ? sensorValue >= threshold
+        : sensorValue >= (threshold - hysteresisAmount);
 
     if (isAbove && !wasAbove && millis() - lastTrigger > retriggerIntervalMs) {
         sendTrigger();
@@ -98,6 +117,19 @@ void Sensor::update() {
 
     if (ledCcSend) {
         ledCcSend->update();
+    }
+
+    // Apagar LEDs tras 2s desde el último cambio de threshold
+    if (thresholdLastChange != 0 && millis() - thresholdLastChange >= THRESHOLD_LED_TIMEOUT) {
+        for (uint8_t i = 0; i < chordLedCount; i++) {
+            if (chordLeds[i]) {
+                chordLeds[i]->turnOff();
+            }
+        }
+        ledReady->turnOff();
+        ledCcSend->turnOff();
+
+        thresholdLastChange = 0; // evita repetir
     }
 }
 

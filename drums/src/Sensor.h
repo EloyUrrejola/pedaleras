@@ -51,6 +51,7 @@ public:
 
 private:
     void sendTrigger();
+    void turnOnAllLeds();
 
     unsigned long lastTrigger;
     bool wasAbove = false;
@@ -64,6 +65,11 @@ private:
     bool readyState = false;
 
     MidiInterface *midi = nullptr;
+
+    // Control de apagado tras cambio de threshold
+    unsigned long thresholdLastChange = 0;
+    bool thresholdLedsOn = false;
+    static const unsigned long THRESHOLD_LED_TIMEOUT = 2000;
 };
 
 #endif
